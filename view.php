@@ -70,8 +70,45 @@ if ($sword->intro) { // Conditions to show the intro can change to look for own 
     echo $OUTPUT->box(format_module_intro('sword', $sword, $cm->id), 'generalbox mod_introbox', 'swordintro');
 }
 
-// Replace the following lines with you own code
-echo $OUTPUT->heading('Yay! It works!');
+//code
+echo $OUTPUT->heading(get_string('assignment_list', 'sword'));
+
+$sql = 'SELECT cm.id, a.name
+FROM {course_modules} cm
+INNER JOIN {assign} a ON a.id = cm.instance
+INNER JOIN {assignsubmission_file} asf ON asf.id=a.id
+WHERE cm.course = a.course
+AND module = (
+SELECT id
+FROM {modules}
+WHERE name = \'assign\' )';
+
+/*
+SELECT cm.id, a.name FROM mdl_course_modules cm INNER JOIN mdl_assign a ON a.id = cm.instance 
+inner join mdl_assignsubmission_file asf on asf.id = a.id WHERE cm.course = a.course AND module 
+= ( SELECT id FROM mdl_modules WHERE name = 'assign' )
+*/
+
+$tareas = $DB->get_records_sql($sql, array('course'=>$course->id));
+$listaTareas = array();
+
+$table = new html_table();
+$table->head = array(get_string('assignment', 'sword'));
+$table->data = array();
+foreach($tareas as $tarea) {
+  $fila = new html_table_row();
+  $url=html_writer::link(  
+                         new moodle_url('/mod/sword/submissions.php', 
+                                      array('id'=> $cm->id,                                             
+                                            'assignment' => $tarea->id, 'sword' => $sword->id)),
+                        $tarea->name);
+  $fila->cells[0] = $url;
+  $table->data[]=$fila;
+  
+  //
+} 
+
+echo html_writer::table($table);
 
 // Finish the page
 echo $OUTPUT->footer();
