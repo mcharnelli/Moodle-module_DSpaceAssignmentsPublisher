@@ -22,18 +22,36 @@
  * You can have a rather longer description of the file as well,
  * if you like, and it can span multiple lines.
  *
- * @package    mod_sword
+ * @package    mod
+ * @subpackage sword
  * @copyright  2011 Your Name
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['modulename'] = 'sword';
+$string['modulename'] = 'SWORD';
 $string['modulenameplural'] = 'swords';
+$string['assignments_list']='Lista de Tareas';
+$string['assignment']='Tarea';
+$string['msg_error']='Fail deposit';
+$string['msg_send']='Successful deposit';
 $string['modulename_help'] = 'Use the sword module for... | The sword module allows...';
-$string['swordfieldset'] = 'Custom example fieldset';
-$string['swordname'] = 'sword name';
+$string['nosend']='Not send';
+$string['send']='Send';
+$string['error']='Error to deposit'; 
+$string['repositoryurl'] = 'url repository';
+$string['repository']='Repository Info ';
+$string['collection']= 'collection';
+$string['username']='usersame';
+$string['password']='password';
+$string['metadata']='Default metadata values';
+$string['subject']='subject';
+$string['rigths']='rights';
+$string['language']='language';
+$string['publisher']='publisher';
+$string['swordname'] = 'SWORD name';
+$string['msg-repository']="Complete de url with the sword ubication and handle's destine collection";
 $string['swordname_help'] = 'This is the content of the help tooltip associated with the swordname field. Markdown syntax is supported.';
 $string['sword'] = 'sword';
 $string['pluginadministration'] = 'sword administration';
