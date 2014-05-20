@@ -17,32 +17,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-// Assignment submission statuses.
-define('ASSIGN_SUBMISSION_STATUS_REOPENED', 'reopened');
-define('ASSIGN_SUBMISSION_STATUS_DRAFT', 'draft');
-define('ASSIGN_SUBMISSION_STATUS_SUBMITTED', 'submitted');
-
-// Search filters for grading page.
-define('ASSIGN_FILTER_SUBMITTED', 'submitted');
-define('ASSIGN_FILTER_SINGLE_USER', 'singleuser');
-define('ASSIGN_FILTER_REQUIRE_GRADING', 'require_grading');
-
-// Reopen attempt methods.
-define('ASSIGN_ATTEMPT_REOPEN_METHOD_NONE', 'none');
-define('ASSIGN_ATTEMPT_REOPEN_METHOD_MANUAL', 'manual');
-define('ASSIGN_ATTEMPT_REOPEN_METHOD_UNTILPASS', 'untilpass');
-
-// Special value means allow unlimited attempts.
-define('ASSIGN_UNLIMITED_ATTEMPTS', -1);
-
-// Marking workflow states.
-define('ASSIGN_MARKING_WORKFLOW_STATE_NOTMARKED', 'notmarked');
-define('ASSIGN_MARKING_WORKFLOW_STATE_INMARKING', 'inmarking');
-define('ASSIGN_MARKING_WORKFLOW_STATE_READYFORREVIEW', 'readyforreview');
-define('ASSIGN_MARKING_WORKFLOW_STATE_INREVIEW', 'inreview');
-define('ASSIGN_MARKING_WORKFLOW_STATE_READYFORRELEASE', 'readyforrelease');
-define('ASSIGN_MARKING_WORKFLOW_STATE_RELEASED', 'released');
-
 require_once($CFG->libdir . '/accesslib.php');
 require_once($CFG->libdir . '/formslib.php');
 require_once($CFG->dirroot . '/repository/lib.php');
@@ -385,7 +359,7 @@ class sword_lib
 
 class sword_assign extends assign {
 
-public function view($action='') {
+public function view2($swordid, $action='grading') {
 
         $o = '';
         $mform = null;
@@ -539,6 +513,31 @@ public function view($action='') {
             $o .= $this->view_submission_page();
         }
 
+        return $o;
+    }
+    
+    
+    /**
+     * View entire grading page.
+     *
+     * @return string
+     */
+    protected function view_grading_page() {
+        global $CFG;
+
+        $o = '';
+        // Need submit permission to submit an assignment.
+        require_capability('mod/assign:grade', $this->context);
+        require_once($CFG->dirroot . '/mod/assign/gradeform.php');
+
+        // Only load this if it is.
+
+        $o .= $this->view_grading_table();
+
+        $o .= $this->view_footer();
+
+        $logmessage = get_string('viewsubmissiongradingtable', 'assign');
+        $this->add_to_log('view submission grading table', $logmessage);
         return $o;
     }
     

@@ -32,7 +32,7 @@ defined('MOODLE_INTERNAL') || die();
 
 $string['modulename'] = 'SWORD';
 $string['modulenameplural'] = 'swords';
-$string['assignments_list']='Lista de Tareas';
+$string['assignment_list']='Lista de Tareas';
 $string['assignment']='Tarea';
 $string['msg_error']='Fail deposit';
 $string['msg_send']='Successful deposit';

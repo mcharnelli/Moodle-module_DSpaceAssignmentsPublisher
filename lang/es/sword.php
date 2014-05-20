@@ -31,7 +31,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $string['modulename'] = 'SWORD';
-$string['assignments_list']='Lista de Tareas';
+$string['assignment_list']='Lista de Tareas';
 $string['assignment']='Tarea';
 $string['msg_error']='Hubo errores en el envío';
 $string['msg_send']='El envío se realizó con éxito';
