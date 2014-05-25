@@ -3,7 +3,7 @@ function recuperarValores()
 {           
   entregasSeleccionadas = [];
   
-  $('input[class="usercheckbox"]:checked').each (function() {  
+  $('input[name="selectedusers"]:checked').each (function() {  
        
        entregasSeleccionadas.push($(this).val());       
       
@@ -17,6 +17,7 @@ function enviar(course_id,assignment_id, swordid)
 {
 
   submissions =recuperarValores();
+  if (submissions.length>0) {
    $("body").addClass("loading"); 
   $.post( "sendToRepo.php",
     {id:course_id,
@@ -29,6 +30,9 @@ function enviar(course_id,assignment_id, swordid)
 	  alert(data);	 
      }
   );
+  } else { 
+      alert("No ha seleccionado ninguna entrega");
+  }
   
   
 }

@@ -1,6 +1,5 @@
 <?php
-echo("AAAAAAAAAAAAAAAAAAAAAAAAAAA");
-//try{
+
 
 require_once("../../config.php");
 require_once("lib.php");
@@ -12,24 +11,21 @@ $submissions    = required_param_array('submissions',PARAM_INT);// submissions s
 $cm             = get_coursemodule_from_id('assign', $id);
 $assignment     = $DB->get_record("assign", array("id"=>$cm->instance));
 $course         = $DB->get_record("course", array("id"=>$assignment->course));
-} catch (Exception $e) {
- echo $e;
-}
-/*
+
+
 require_login($assignment->course, false, $cm);
 
 /// Load up the required assignment code
 
 require($CFG->dirroot.'/mod/sword/locallib.php');
 
+$context= context_module::instance($cm->id);
+$sword_assign = new sword_assign($context,$cm,$course,$swordid,$assignment);
 
-$sword_action = new sword_lib($assignment->id, $assignment, $cm, $course, $swordid);
+$sword_assign->sword_submissions($submissions);
 
 
-$sword_action->sword_submissions($submissions);
-
-/*
 } catch(Exception $e)  {
   echo get_string('msg_error', 'sword');
-}*/
+}
 

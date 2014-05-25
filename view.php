@@ -100,7 +100,8 @@ foreach($tareas as $tarea) {
   $url=html_writer::link(  
                          new moodle_url('/mod/sword/submissions.php', 
                                       array('id'=> $cm->id,                                             
-                                            'assignment' => $tarea->id, 'sword' => $sword->id)),
+                                            'assignment' => $tarea->id, 
+                                            'sword' => $sword->id)),
                         $tarea->name);
   $fila->cells[0] = $url;
   $table->data[]=$fila;

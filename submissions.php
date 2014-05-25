@@ -29,12 +29,11 @@ $context = context_module::instance($cm->id);
 
 require_capability('mod/assign:view', $context);
 
-$sword_assign = new sword_assign($context, $cm, $course);
-
+$sword_assign = new sword_assign($context,$cm,$course,$sword,$assignment);
 $completion=new completion_info($course);
 $completion->set_module_viewed($cm);
 
 // Get the assign class to
 // render the page.
-echo $sword_assign->view2($context,$sword);
+echo $sword_assign->view();
    
