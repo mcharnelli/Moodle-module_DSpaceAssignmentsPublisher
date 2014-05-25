@@ -15,7 +15,7 @@ function recuperarValores()
 function enviar(course_id,assignment_id, swordid)
 
 {
-  
+
   submissions =recuperarValores();
    $("body").addClass("loading"); 
   $.post( "sendToRepo.php",

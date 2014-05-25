@@ -31,6 +31,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $string['modulename'] = 'SWORD';
+$string['sendtorepo'] = 'Send to repo';
 $string['modulenameplural'] = 'swords';
 $string['assignment_list']='Lista de Tareas';
 $string['assignment']='Tarea';

@@ -29,7 +29,7 @@ require_once($CFG->dirroot . '/mod/assign/renderable.php');
 require_once($CFG->dirroot . '/mod/assign/gradingtable.php');
 require_once($CFG->libdir . '/eventslib.php');
 require_once($CFG->libdir . '/portfolio/caller.php');
-
+require_once($CFG->dirroot . '/mod/sword/sword_submissions_form.php');
 /**
  * Internal library of functions for module sword
  *
@@ -45,97 +45,28 @@ require_once($CFG->dirroot.'/mod/assign/locallib.php');
 
 class sword_lib  
 {
+
+   private $assignmentid;
+   private $assignment;
+   private $cm;
+   private $course;
+   private $swordid;
+
+   public function __construct($assignmentid, $assignment, $cm, $course, $swordid) {
+        $this->assignmentid=$assignmentid;
+        $this->assignment=$assignment;
+        $this->cm=$cm;
+        $this->course=$course;
+        $this->swordid=$swordid;
+   }
+
   /**
      * Download a zip file of all assignment submissions.
      *
      * @return string - If an error occurs, this will contain the error page.
      */
     protected function sword_submissions($userselected) {
-        global $CFG, $DB;
-
-        // More efficient to load this here.
-        require_once($CFG->libdir.'/filelib.php');
-
-        require_capability('mod/assign:grade', $this->context);
-
-        // Load all users with submit.
-        $students = get_enrolled_users($this->context, "mod/assign:submit", null, 'u.*', null, null, null,
-                        $this->show_only_active_users());
-        $students_selected = array();
-        foreach ($students as $student) {
-           if (in_array($student->id, $userselected)) {
-                $students_selected[]=$student;
-           }
-        }
-
-        // Build a list of files to zip.
-        $filesforzipping = array();
-        $fs = get_file_storage();
-
-        $groupmode = groups_get_activity_groupmode($this->get_course_module());
-        // All users.
-        $groupid = 0;
-        $groupname = '';
-        if ($groupmode) {
-            $groupid = groups_get_activity_group($this->get_course_module(), true);
-            $groupname = groups_get_group_name($groupid).'-';
-        }
-
-       
-        // Get all the files for each student.
-        foreach ($students_selected as $student) {
-            $userid = $student->id;
-
-            if ((groups_is_member($groupid, $userid) or !$groupmode or !$groupid)) {
-                // Get the plugins to add their own files to the zip.
-
-                $submissiongroup = false;
-                $groupname = '';
-                if ($this->get_instance()->teamsubmission) {
-                    $submission = $this->get_group_submission($userid, 0, false);
-                    $submissiongroup = $this->get_submission_group($userid);
-                    if ($submissiongroup) {
-                        $groupname = $submissiongroup->name . '-';
-                    } else {
-                        $groupname = get_string('defaultteam', 'assign') . '-';
-                    }
-                } else {
-                    $submission = $this->get_user_submission($userid, false);
-                }
-
-                if ($submission) {
-                    foreach ($this->submissionplugins as $plugin) {
-                        if ($plugin->is_enabled() && $plugin->is_visible()) {
-                            $pluginfiles = $plugin->get_files($submission, $student);
-                            $files = array();
-                            foreach ($pluginfiles as $zipfilename => $file) {
-
-                                $files[]= $file;
-                                $filetitle=$file->get_filename();
-                                $newstring = substr($filetitle, -3);
-                                if($newstring=="txt"){
-                                   $contents = $file->get_content();
-                                    $arr = explode("\n", $contents);                
-                                }
-                                           
-                                $this->copyFileToTemp($file);
-                                
-                            }
-                            //$paquete = $this->makePackage($files, $swordid, $arr, $userid, $assignment_type->assignment->id);
-                            //throw new Exception(print_r($paquete));
-                           // $resultado  = $this->sendToRepository($paquete,$submission->id, $swordid);;
-                            $error = $error ||  $resultado;
-                        }
-                        
-                    }
-                }
-            }
-        }
-        if ($error==true) {
-	  echo get_string('msg_error', 'sword');
-        } else {
-	  echo get_string('msg_send', 'sword');
-        }
+        echo("Hola Emi");
         
     }
     
@@ -359,7 +290,12 @@ class sword_lib
 
 class sword_assign extends assign {
 
-public function view2($swordid, $action='grading') {
+protected function sword_submissions($userselected) {
+        echo("Hola Lolo");
+        
+ }
+
+public function view2($coursemodulecontext,$swordid, $action='grading') {
 
         $o = '';
         $mform = null;
@@ -490,7 +426,7 @@ public function view2($swordid, $action='grading') {
         } else if ($action == 'editsubmission') {
             $o .= $this->view_edit_submission_page($mform, $notices);
         } else if ($action == 'grading') {
-            $o .= $this->view_grading_page();
+            $o .= $this->view_grading_page2($coursemodulecontext, $swordid);
         } else if ($action == 'downloadall') {
             $o .= $this->download_submissions();
         } else if ($action == 'submit') {
@@ -522,17 +458,17 @@ public function view2($swordid, $action='grading') {
      *
      * @return string
      */
-    protected function view_grading_page() {
+    protected function view_grading_page2($coursemodulecontext, $swordid) {
         global $CFG;
 
         $o = '';
         // Need submit permission to submit an assignment.
-        require_capability('mod/assign:grade', $this->context);
+        require_capability('mod/assign:grade', $coursemodulecontext);
         require_once($CFG->dirroot . '/mod/assign/gradeform.php');
 
         // Only load this if it is.
 
-        $o .= $this->view_grading_table();
+        $o .= $this->view_grading_table2($coursemodulecontext, $swordid);
 
         $o .= $this->view_footer();
 
@@ -547,7 +483,7 @@ public function view2($swordid, $action='grading') {
      *
      * @return string
      */
-    protected function view_grading_table() {
+    protected function view_grading_table2($coursemodulecontext, $swordid) {
         global $USER, $CFG;
 
         // Include grading options form.
@@ -567,7 +503,8 @@ public function view2($swordid, $action='grading') {
         //@@@ agregar botón para poder seleccionar tareas para enviar al repo
         if ($this->is_any_submission_plugin_enabled() && $this->count_submissions()) {
             //$downloadurl = '/mod/assign/view.php?id=' . $cmid . '&action=sendtorepo';
-            $downloadurl= new moodle_url('/mod/assign/view.php', array('id'=> $cmid, 'action'=>'sendtorepo'));
+           // $downloadurl= new moodle_url('/mod/assign/view.php', array('id'=> $cmid, 'action'=>'sendtorepo'));
+             $downloadurl= new moodle_url("#");
            // $links[$downloadurl] = get_string('sendtorepo', 'assign');
         }
         
@@ -598,7 +535,15 @@ public function view2($swordid, $action='grading') {
         core_collator::asort($links);
 
         
-        $gradingactions = new action_link($downloadurl, get_string('sendtorepo', 'assign'));
+        $gradingactions = new action_link($downloadurl, get_string('sendtorepo', 'sword'),null,array('onclick'=>
+                                                               "enviar(". $coursemodulecontext->id . " ,".  $cmid . " ," . $swordid . ")" ));
+        
+        
+        //echo '<input type="button" onclick= value="'.get_string('swordall', 'assignment').'" />';
+        
+        
+        
+        
         //$gradingactions = new url_select($links);
         //$gradingactions->set_label(get_string('choosegradingaction', 'assign'));
 
@@ -611,7 +556,7 @@ public function view2($swordid, $action='grading') {
         //$controller = $gradingmanager->get_active_controller();
         //$showquickgrading = empty($controller);
         //$quickgrading = get_user_preferences('assign_quickgrading', false);
-        $showonlyactiveenrolopt = has_capability('moodle/course:viewsuspendedusers', $this->context);
+        $showonlyactiveenrolopt = has_capability('moodle/course:viewsuspendedusers', $coursemodulecontext);
 
         $markingallocation = $this->get_instance()->markingallocation &&
             has_capability('mod/assign:manageallocations', $this->context);
@@ -637,7 +582,7 @@ public function view2($swordid, $action='grading') {
 
         // Print options for changing the filter and changing the number of results per page.
         $gradingoptionsformparams = array('cm'=>$cmid,
-                                          'contextid'=>$this->context->id,
+                                          'contextid'=>$coursemodulecontext->id,
                                           'userid'=>$USER->id,
                                           'submissionsenabled'=>$this->is_any_submission_plugin_enabled(),
                                          // 'showquickgrading'=>$showquickgrading,
@@ -661,16 +606,17 @@ public function view2($swordid, $action='grading') {
                                  'feedbackplugins'=>$this->get_feedback_plugins(),
                                  'context'=>$this->get_context(),
                                  'markingworkflow'=>$markingworkflow,
-                                 'markingallocation'=>$markingallocation);
+                                 'markingallocation'=>$markingallocation,
+                                 );
         $classoptions = array('class'=>'gradingbatchoperationsform');
         
-
-       $gradingbatchoperationsform = new mod_assign_grading_batch_operations_form(null,
+      
+       $gradingbatchoperationsform = new sword_submisison_form(null,
                                                                                    $batchformparams,
                                                                                    'post',
                                                                                    '',
                                                                                    $classoptions);
-
+	
         $gradingoptionsdata = new stdClass();
         $gradingoptionsdata->perpage = $perpage;
         $gradingoptionsdata->filter = $filter;
@@ -740,7 +686,7 @@ public function view2($swordid, $action='grading') {
 
         $markingallocation = $this->get_instance()->markingallocation &&
             has_capability('mod/assign:manageallocations', $this->context);
-
+    
         $batchformparams = array('cm'=>$this->get_course_module()->id,
                                  'submissiondrafts'=>$this->get_instance()->submissiondrafts,
                                  'duedate'=>$this->get_instance()->duedate,
@@ -748,13 +694,15 @@ public function view2($swordid, $action='grading') {
                                  'feedbackplugins'=>$this->get_feedback_plugins(),
                                  'context'=>$this->get_context(),
                                  'markingworkflow'=>$this->get_instance()->markingworkflow,
-                                 'markingallocation'=>$markingallocation);
+                                 'markingallocation'=>$markingallocation,
+                         );
         $formclasses = array('class'=>'gradingbatchoperationsform');
         $mform = new mod_assign_grading_batch_operations_form(null,
                                                               $batchformparams,
                                                               'post',
                                                               '',
                                                               $formclasses);
+                                                              
 
         if ($data = $mform->get_data()) {
             // Get the list of users.
@@ -763,7 +711,7 @@ public function view2($swordid, $action='grading') {
 
             $prefix = 'plugingradingbatchoperation_';
 
-            if ($data->operation == 'grantextension') {
+           /* if ($data->operation == 'grantextension') {
                 // Reset the form so the grant extension page will create the extension form.
                 $mform = null;
                 return 'grantextension';
@@ -779,9 +727,9 @@ public function view2($swordid, $action='grading') {
                 if ($plugin) {
                     return 'plugingradingbatchoperation';
                 }
-            }
+            }*/
            // throw new Exception('Hola samigos');
- $this->sword_submissions($userlist);
+           $this->sword_submissions($userlist);
             //foreach ($userlist as $userid) {
                // if ($data->operation == 'lock') {
                //throw new Exception('Hola samigos' . $userid);
@@ -803,7 +751,7 @@ public function view2($swordid, $action='grading') {
             }
         }
 
-        return 'grading';
+        $this->view2('grading');
     }
 
 }

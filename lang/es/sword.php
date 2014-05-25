@@ -31,6 +31,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $string['modulename'] = 'SWORD';
+$string['sendtorepo'] = 'Enviar al repo';
 $string['assignment_list']='Lista de Tareas';
 $string['assignment']='Tarea';
 $string['msg_error']='Hubo errores en el envío';
