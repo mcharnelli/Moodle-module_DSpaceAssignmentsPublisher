@@ -10,7 +10,7 @@ $id             = required_param('id',PARAM_INT);          // Course module ID
 $submissions    = required_param_array('submissions',PARAM_INT);// submissions selected
 $assignment_id  = required_param('assignment_id',PARAM_INT);// submissions selected
 
-$cm             = get_coursemodule_from_id('assign', $id);
+$cm             = get_coursemodule_from_id('assign', $assignment_id);
 $assignment     = $DB->get_record("assign", array("id"=>$assignment_id));
 $course         = $DB->get_record("course", array("id"=>$assignment->course));
 

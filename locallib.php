@@ -587,28 +587,39 @@ public function view( $action='grading') {
                 }
                 $arr=array();
                 
-                if ($submission) {
-                    $files = array();
+                if ($submission) {                    
+                    $filesdata=array();  
                     foreach ($this->submissionplugins as $plugin) {
                          
                         if ($plugin->is_enabled() && $plugin->is_visible()) {
                             $pluginfiles = $plugin->get_files($submission, $student);
                             
+                                             
                             foreach ($pluginfiles as $zipfilename => $file) {
-                               
-                                $files[]= $file;
-                                
-                                $filetitle=$file->get_filename();
-                                
-                                $newstring = substr($filetitle, -3);
-                                if($newstring=="txt"){
-                                   $contents = $file->get_content();
-                                    $arr[] = explode("\n", $contents);                
-                                }
-                                           
-                                $this->copyFileToTemp($file);
-                                
-                            }
+                              if ($file instanceof stored_file) { 
+				  
+				  $filetitle=$file->get_filename();
+				  
+				  $newstring = substr($filetitle, -3);
+				  if($newstring=="txt"){
+				    $contents = $file->get_content();
+				      $arr[] = explode("\n", $contents);                
+				  }
+					    
+				  $this->copyFileToTemp($file);
+				  
+				  $filesdata[] = array (
+	                                   "filename" => $file->get_filename(),	    
+	                                   "mimetype" => $file->get_mimetype(),
+	                          );				  
+                              } else {
+                                  $this->createFileInTemp("Content.html",$file[0]);                                  
+                                  $filesdata[] = array (
+	                                   "filename" => "Content.html",	    
+	                                   "mimetype" => "text/html",
+	                          );                                  
+                             } 
+                          }
                             
                         }
                         
@@ -616,7 +627,7 @@ public function view( $action='grading') {
                     
                 }
                
-                $paquete = $this->makePackage($files, $this->sword, $arr, $userid, $this->assignment->id);
+                $paquete = $this->makePackage($filesdata, $this->sword, $arr, $userid, $this->assignment->id);
                 echo($paquete);
                             
                  $resultado  = $this->sendToRepository($paquete,$submission->id, $this->sword);;
@@ -640,7 +651,7 @@ public function view( $action='grading') {
      * $rootout is The location to write the package out to
      * $fileout is The filename to save the package as
      */
-     private function makePackage($files, $swordid, $arr, $userid,$assigid ) 
+     private function makePackage($filesdata, $swordid, $arr, $userid,$assigid ) 
      {
         
         global $CFG,$DB;
@@ -664,16 +675,7 @@ public function view( $action='grading') {
 	);
 	
 	
-        
-        $filesdata=array();
-        foreach ($files as $file){
-	    $filesdata[] = array (
-	    "filename" => $file->get_filename(),
-	    
-	    "mimetype" => $file->get_mimetype(),
-	    );
-            
-        }
+     
         
         $datos["files"]=$filesdata;
         
@@ -857,6 +859,11 @@ public function view( $action='grading') {
            fwrite($tempFile,$file->get_content());
            fclose($tempFile);  
       }              
+    }
+    private function createFileInTemp($filename, $content)
+    {
+      @mkdir(sys_get_temp_dir().'/moodle');
+      file_put_contents(sys_get_temp_dir().'/moodle/'.$filename,$content);
     }
     
     
