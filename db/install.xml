@@ -4,14 +4,19 @@
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
   <TABLES>
-    <TABLE NAME="sword" COMMENT="Default comment for sword, please edit me">
+    <TABLE NAME="sword" COMMENT="Default comment for sword, please edit me" NEXT="sword_submissions">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="course"/>
         <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="Course sword activity belongs to" PREVIOUS="id" NEXT="name"/>
-        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="name field for moodle instances" PREVIOUS="course" NEXT="intro"/>
-        <FIELD NAME="intro" TYPE="text" LENGTH="big" NOTNULL="false" SEQUENCE="false" COMMENT="General introduction of the sword activity" PREVIOUS="name" NEXT="introformat"/>
-        <FIELD NAME="introformat" TYPE="int" LENGTH="4" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="Format of the intro field (MOODLE, HTML, MARKDOWN...)" PREVIOUS="intro" NEXT="timecreated"/>
-        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="introformat" NEXT="timemodified"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="name field for moodle instances" PREVIOUS="course" NEXT="url"/>
+        <FIELD NAME="url" TYPE="char" LENGTH="70" NOTNULL="true" SEQUENCE="false" PREVIOUS="name" NEXT="username"/>
+        <FIELD NAME="username" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false" PREVIOUS="url" NEXT="password"/>
+        <FIELD NAME="password" TYPE="char" LENGTH="32" NOTNULL="true" SEQUENCE="false" PREVIOUS="username" NEXT="subject"/>
+        <FIELD NAME="subject" TYPE="char" LENGTH="500" NOTNULL="true" SEQUENCE="false" PREVIOUS="password" NEXT="rights"/>
+	<FIELD NAME="rights" TYPE="char" LENGTH="50" NOTNULL="true" SEQUENCE="false" PREVIOUS="subject" NEXT="language"/>
+	<FIELD NAME="language" TYPE="char" LENGTH="50" NOTNULL="true" SEQUENCE="false" PREVIOUS="rights" NEXT="publisher"/>
+	<FIELD NAME="publisher" TYPE="char" LENGTH="50" NOTNULL="true" SEQUENCE="false" PREVIOUS="language" NEXT="timecreated" />	
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="publisher" NEXT="timemodified"/>
         <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="timecreated"/>
       </FIELDS>
       <KEYS>
@@ -19,6 +24,19 @@
       </KEYS>
       <INDEXES>
         <INDEX NAME="course" UNIQUE="false" FIELDS="course"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="sword_submissions" COMMENT="Default comment for sword, please edit me" PREVIOUS="sword" >
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="submission"/>
+	<FIELD NAME="submission" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="  belongs to" PREVIOUS="id" NEXT="status"/>
+        <FIELD NAME="status" TYPE="char" LENGTH="100" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="  belongs to" PREVIOUS="submission"/>        
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="submission" UNIQUE="false" FIELDS="submission"/>
       </INDEXES>
     </TABLE>
   </TABLES>

@@ -564,7 +564,7 @@ public function view( $action='grading') {
             $groupname = groups_get_group_name($groupid).'-';
         }
 
-       
+       $error = false;
         // Get all the files for each student.
         foreach ($students_selected as $student) {
             $userid = $student->id;
@@ -613,7 +613,7 @@ public function view( $action='grading') {
                                echo (e);
                             }
                             
-                           // $resultado  = $this->sendToRepository($paquete,$submission->id, $this->sword);;
+                            $resultado  = $this->sendToRepository($paquete,$submission->id, $this->sword);;
                             $error = $error ||  $resultado;
                         }
                         
@@ -802,8 +802,9 @@ public function view( $action='grading') {
 		    $error = false;
 		    try{
 		        $sac = new SWORDAPPClient();
+		        echo $url;
 		        $dr = $sac->deposit($url, $user, $pw, '', $package, $packageformat,$contenttype, false);		   		   
-		   	
+		   	print_r($dr);
 			if ($dr->sac_status!=201) {  
 			      $status='error';
 			      $error = true;
@@ -815,6 +816,7 @@ public function view( $action='grading') {
 		   } catch(Exception $e){		      
 		      $status='error';
 		      $error = true;
+		      echo ($e);
 		   }
 		   
 		   

@@ -21,7 +21,8 @@
  * It uses the standard core Moodle formslib. For more info about them, please
  * visit: http://docs.moodle.org/en/Development:lib/formslib.php
  *
- * @package    mod_sword
+ * @package    mod
+ * @subpackage sword
  * @copyright  2011 Your Name
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -58,15 +59,81 @@ class mod_sword_mod_form extends moodleform_mod {
         $mform->addHelpButton('name', 'swordname', 'sword');
 
         // Adding the standard "intro" and "introformat" fields
-        $this->add_intro_editor();
+        //$this->add_intro_editor();
 
         //-------------------------------------------------------------------------------
         // Adding the rest of sword settings, spreeading all them into this fieldset
         // or adding more fieldsets ('header' elements) if needed for better logic
-        $mform->addElement('static', 'label1', 'swordsetting1', 'Your sword fields go here. Replace me!');
-
-        $mform->addElement('header', 'swordfieldset', get_string('swordfieldset', 'sword'));
-        $mform->addElement('static', 'label2', 'swordsetting2', 'Your sword fields go here. Replace me!');
+        
+        $mform->addElement('header', 'repository', get_string('repository', 'sword'));
+        
+        $mform->addElement('text', 'url', get_string('repositoryurl', 'sword'), array('size'=>'64'));
+        
+         if (!empty($CFG->formatstringstriptags)) {
+            $mform->setType('url', PARAM_TEXT);
+        } else {
+            $mform->setType('url', PARAM_CLEAN);
+        }
+        
+        $mform->addRule('url', null, 'required', null, 'client');
+        
+        $mform->addElement('text', 'username', get_string('username', 'sword'), array('size'=>'64'));
+        
+          if (!empty($CFG->formatstringstriptags)) {
+            $mform->setType('username', PARAM_TEXT);
+        } else {
+            $mform->setType('username', PARAM_CLEAN);
+        }
+        
+        $mform->addRule('username', null, 'required', null, 'client');
+        $mform->addElement('text', 'password', get_string('password', 'sword'), array('size'=>'64'));
+        
+           if (!empty($CFG->formatstringstriptags)) {
+            $mform->setType('password', PARAM_TEXT);
+        } else {
+            $mform->setType('password', PARAM_CLEAN);
+        }
+        
+        $mform->addRule('password', null, 'required', null, 'client');
+        
+        
+        $mform->addElement('header', 'metadata', get_string('metadata', 'sword'));
+        $mform->addElement('text', 'subject', get_string('subject', 'sword'), array('size'=>'64'));
+        
+           if (!empty($CFG->formatstringstriptags)) {
+            $mform->setType('subject', PARAM_TEXT);
+        } else {
+            $mform->setType('subject', PARAM_CLEAN);
+        }
+        
+        $mform->addElement('text', 'rigths', get_string('rigths', 'sword'), array('size'=>'64'));
+        
+        
+            if (!empty($CFG->formatstringstriptags)) {
+            $mform->setType('rigths', PARAM_TEXT);
+        } else {
+            $mform->setType('rigths', PARAM_CLEAN);
+        }
+        
+        
+        $mform->addElement('text', 'language', get_string('language', 'sword'), array('size'=>'64'));
+        
+        
+          if (!empty($CFG->formatstringstriptags)) {
+            $mform->setType('language', PARAM_TEXT);
+        } else {
+            $mform->setType('language', PARAM_CLEAN);
+        }
+        
+        
+        $mform->addElement('text', 'publisher', get_string('publisher', 'sword'), array('size'=>'64'));
+        
+        
+            if (!empty($CFG->formatstringstriptags)) {
+            $mform->setType('publisher', PARAM_TEXT);
+        } else {
+            $mform->setType('publisher', PARAM_CLEAN);
+        }
 
         //-------------------------------------------------------------------------------
         // add standard elements, common to all modules

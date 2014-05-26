@@ -18,7 +18,8 @@
 /**
  * @see uninstall_plugin()
  *
- * @package    mod_sword
+ * @package    mod
+ * @subpackage sword
  * @copyright  2011 Your Name <your@email.adress>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
