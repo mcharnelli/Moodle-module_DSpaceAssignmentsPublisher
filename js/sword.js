@@ -18,8 +18,9 @@ function enviar(course_id,assignment_id, swordid)
 
   submissions =recuperarValores();
   if (submissions.length>0) {
-   $("body").addClass("loading"); 
-  $.post( "sendToRepo.php",
+   $("body").addClass("loading");
+    
+   $.post( "sendToRepo.php",
     {id:course_id,
      assignment_id:assignment_id,
      submissions:submissions,
@@ -27,6 +28,7 @@ function enviar(course_id,assignment_id, swordid)
     },
      function(data, textStatus, jqXHR) {
            $("body").removeClass("loading"); 
+	   
 	  alert(data);	 
      }
   );

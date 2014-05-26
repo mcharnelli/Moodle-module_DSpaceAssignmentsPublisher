@@ -5,11 +5,13 @@ require_once("../../config.php");
 require_once("lib.php");
 require_once($CFG->libdir.'/plagiarismlib.php');
 try {
-$swordid             = required_param('swordid',PARAM_INT);          // SWORD ID
+$swordid        = required_param('swordid',PARAM_INT);          // SWORD ID
 $id             = required_param('id',PARAM_INT);          // Course module ID
 $submissions    = required_param_array('submissions',PARAM_INT);// submissions selected
+$assignment_id  = required_param('assignment_id',PARAM_INT);// submissions selected
+
 $cm             = get_coursemodule_from_id('assign', $id);
-$assignment     = $DB->get_record("assign", array("id"=>$cm->instance));
+$assignment     = $DB->get_record("assign", array("id"=>$assignment_id));
 $course         = $DB->get_record("course", array("id"=>$assignment->course));
 
 
@@ -26,6 +28,7 @@ $sword_assign->sword_submissions($submissions);
 
 
 } catch(Exception $e)  {
+  echo $e;
   echo get_string('msg_error', 'sword');
 }
 

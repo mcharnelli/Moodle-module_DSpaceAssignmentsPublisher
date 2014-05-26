@@ -6,6 +6,8 @@ require_once($CFG->dirroot . '/mod/sword/locallib.php');
 
 $PAGE->requires->js('/mod/sword/js/sword.js', true);
 $PAGE->requires->js('/mod/sword/js/jquery.js', true);
+$PAGE->requires->css('/mod/sword/css/estilo.css', true);
+
 
 $id = required_param('id', PARAM_INT); // Course module ID
 $sword =  required_param('sword', PARAM_INT); // SWORD ID
@@ -36,4 +38,5 @@ $completion->set_module_viewed($cm);
 // Get the assign class to
 // render the page.
 echo $sword_assign->view();
+echo html_writer::tag('div', '', array('class'=>'modal')); 
    

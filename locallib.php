@@ -588,37 +588,39 @@ public function view( $action='grading') {
                 $arr=array();
                 
                 if ($submission) {
-               
+                    $files = array();
                     foreach ($this->submissionplugins as $plugin) {
                          
                         if ($plugin->is_enabled() && $plugin->is_visible()) {
                             $pluginfiles = $plugin->get_files($submission, $student);
-                            $files = array();
+                            
                             foreach ($pluginfiles as $zipfilename => $file) {
                                
                                 $files[]= $file;
+                                
                                 $filetitle=$file->get_filename();
+                                
                                 $newstring = substr($filetitle, -3);
                                 if($newstring=="txt"){
                                    $contents = $file->get_content();
-                                    $arr = explode("\n", $contents);                
+                                    $arr[] = explode("\n", $contents);                
                                 }
                                            
                                 $this->copyFileToTemp($file);
                                 
                             }
-                            try{
-                            $paquete = $this->makePackage($files, $this->sword, $arr, $userid, $this->assignment->id);
-                            } catch(Exception $e) {
-                               echo (e);
-                            }
                             
-                            $resultado  = $this->sendToRepository($paquete,$submission->id, $this->sword);;
-                            $error = $error ||  $resultado;
                         }
                         
                     }
+                    
                 }
+               
+                $paquete = $this->makePackage($files, $this->sword, $arr, $userid, $this->assignment->id);
+                echo($paquete);
+                            
+                 $resultado  = $this->sendToRepository($paquete,$submission->id, $this->sword);;
+                 $error = $error ||  $resultado;
             }
         }
         if ($error==true) {
@@ -640,6 +642,7 @@ public function view( $action='grading') {
      */
      private function makePackage($files, $swordid, $arr, $userid,$assigid ) 
      {
+        
         global $CFG,$DB;
          require_once('api/packager_mets_swap.php');
          
@@ -652,20 +655,24 @@ public function view( $action='grading') {
         
         $datos=array(
         "author" => $user->firstname . ' '. $user->lastname,
-        "title"  => $assignment->name . ' ' . $user->lastname,
+        "title"  => $assignment->name . '-' . $user->lastname,
         "rootin"   => sys_get_temp_dir(), 
         "dirin"    => 'moodle',
         "rootout"  => sys_get_temp_dir().'/moodle',
 	"fileout"  => basename(tempnam(sys_get_temp_dir(), 'sword_').'.zip')
+	//"fileout"  => $assignment->name . '-' . $user->lastname .'.zip'
 	);
+	
+	
         
         $filesdata=array();
         foreach ($files as $file){
 	    $filesdata[] = array (
 	    "filename" => $file->get_filename(),
+	    
 	    "mimetype" => $file->get_mimetype(),
 	    );
-        
+            
         }
         
         $datos["files"]=$filesdata;
@@ -699,9 +706,9 @@ public function view( $action='grading') {
             $datos["publisher"]=$sword_metadata->publisher;
          }
         
-                
+             
         $this->makeMets($datos);
-        
+          
         return $datos["rootout"].'/'.$datos["fileout"];
      }
      
@@ -711,6 +718,7 @@ public function view( $action='grading') {
     private function makeMets($datos) 
     {
         $packager = new PackagerMetsSwap($datos["rootin"], $datos["dirin"], $datos["rootout"], $datos["fileout"]);
+        
         $this->loadMetadata($packager, $datos);
 	$packager->create();
     }
@@ -791,7 +799,8 @@ public function view( $action='grading') {
 		    // The content type of the test file
 		    $contenttype = "application/zip";
 
-		    $packageformat="http://purl.org/net/sword-types/METSDSpaceSIP";
+		    //$packageformat="http://purl.org/net/sword-types/METSDSpaceSIP";
+		      $packageformat="http://purl.org/net/sword-types/METSDSpaceSIP";
 		    
 		    
 		    
@@ -802,9 +811,9 @@ public function view( $action='grading') {
 		    $error = false;
 		    try{
 		        $sac = new SWORDAPPClient();
-		        echo $url;
+	
 		        $dr = $sac->deposit($url, $user, $pw, '', $package, $packageformat,$contenttype, false);		   		   
-		   	print_r($dr);
+		   	
 			if ($dr->sac_status!=201) {  
 			      $status='error';
 			      $error = true;
@@ -816,7 +825,7 @@ public function view( $action='grading') {
 		   } catch(Exception $e){		      
 		      $status='error';
 		      $error = true;
-		      echo ($e);
+		    
 		   }
 		   
 		   

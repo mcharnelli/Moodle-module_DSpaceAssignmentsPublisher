@@ -49,9 +49,11 @@ class SWORDAPPClient {
     // on-behalf-of the specified user, and with the given file and formatnamespace and noop setting
     function deposit($sac_url, $sac_u, $sac_p, $sac_obo, $sac_fname,
                      $sac_packaging= '', $sac_contenttype = '', $sac_inprogress = false) {
+
+        
         // Perform the deposit
         $sac_curl = $this->curl_init($sac_url, $sac_u, $sac_p);
-
+	
         curl_setopt($sac_curl, CURLOPT_POST, true);
 
         $headers = array();
@@ -110,13 +112,13 @@ class SWORDAPPClient {
         } else {
             try {
                 // Parse the result
-
                 $sac_dresponse = new SWORDAPPErrorDocument($sac_status, $sac_resp);
                 // Get the deposit results
                 $sac_xml = @new SimpleXMLElement($sac_resp);
                 $sac_ns = $sac_xml->getNamespaces(true);
 
                 // Build the deposit response object
+                
                 $sac_dresponse->buildhierarchy($sac_xml, $sac_ns);
             } catch (Exception $e) {
                // throw new Exception("Error parsing error document (" . $e->getMessage() . ")");
@@ -441,7 +443,7 @@ class SWORDAPPClient {
     function retrieveAtomStatement($sac_url, $sac_u, $sac_p, $sac_obo) {
         // Get the Atom statement
         $sac_curl = $this->curl_init($sac_url, $sac_u, $sac_p);
-
+	
         $headers = array();
         global $sal_useragent;
         array_push($headers, $sal_useragent);
