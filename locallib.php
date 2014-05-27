@@ -265,7 +265,7 @@ public function view( $action='grading') {
         global $USER, $CFG;
 
         // Include grading options form.
-        require_once($CFG->dirroot . '/mod/assign/gradingoptionsform.php');
+        require_once($CFG->dirroot . '/mod/sword/gradingoptionsform.php');
         require_once($CFG->dirroot . '/mod/assign/quickgradingform.php');
         require_once($CFG->dirroot . '/mod/assign/gradingbatchoperationsform.php');
         $o = '';
@@ -371,7 +371,7 @@ public function view( $action='grading') {
                                           'showonlyactiveenrol'=>$this->show_only_active_users());
 
         $classoptions = array('class'=>'gradingoptionsform');
-        $gradingoptionsform = new mod_assign_grading_options_form(null,
+        $gradingoptionsform = new mod_sword_grading_options_form(null,
                                                                   $gradingoptionsformparams,
                                                                   'post',
                                                                   '',
