@@ -108,7 +108,30 @@ foreach($tareas as $tarea) {
   
   //
 } 
-
+/**
+  * Assignment Module 2.2
+  */
+$sql = 'SELECT cm.id, a.name
+FROM {course_modules} cm
+INNER JOIN {assignment} a ON a.id = cm.instance
+WHERE cm.course = :course
+AND module = (
+SELECT id
+FROM {modules}
+WHERE name = \'assignment\' )';
+$tareas = $DB->get_records_sql($sql, array('course'=>$course->id));
+foreach($tareas as $tarea) {
+  $fila = new html_table_row();
+  $url=html_writer::link(  
+                         new moodle_url('/mod/sword/submissions22.php', 
+                                      array('id'=> $cm->id,                                             
+                                            'assignment' => $tarea->id, 'sword' => $sword->id)),
+                        $tarea->name);
+  $fila->cells[0] = $url;
+  $table->data[]=$fila;
+  
+  //
+} 
 echo html_writer::table($table);
 
 // Finish the page
