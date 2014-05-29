@@ -73,7 +73,7 @@ class mod_sword_mod_form extends moodleform_mod {
         $mform->addElement('text', 'base_url', get_string('repositoryurl', 'sword'), array('size'=>'50'));
          $mform->setType('base_url', PARAM_CLEAN);
         
-        $mform->addElement('button', 'find', "Buscar", array('onclick' => 'getCollections()'));
+        $mform->addElement('button', 'find', "Buscar", array('onclick' => 'getCollections(null)'));
         $mform->setType('find', PARAM_CLEAN);
         
         $mform->addElement('select', 'url_selector', get_string("selectcollection",'sword'));
@@ -83,7 +83,7 @@ class mod_sword_mod_form extends moodleform_mod {
         } else {
             $mform->setType('url_selector', PARAM_CLEAN);
         }
-        $mform->addElement('hidden','url', array("id" => "url"));
+        $mform->addElement('text','url', "Url de la colección",array("id" => "url","size"=>"64"));
         $mform->setType('url', PARAM_CLEAN);
         
         $mform->addElement('text', 'username', get_string('username', 'sword'), array('size'=>'64'));

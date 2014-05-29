@@ -1,4 +1,4 @@
-function getCollections(){
+function getCollections(selected){
  url = $("#id_base_url").val(); 
  $.ajax({
     type: "POST",
@@ -9,10 +9,17 @@ function getCollections(){
      success: function(json) {          
 	  for (var key in json) {
 	      collection = json[key];
-	      $("#id_url_selector").append('<option value="' + url + '/sword/deposit/' + collection["handle"] + '">' + collection["name"] +"</option>");
-	     
+	      optionBegin = '<option value="' + url + '/sword/deposit/' + collection["handle"] + '"';
+	      optionEnd   = collection["name"] +"</option>";
+	      if ((selected != null) &&  (selected == collection["handle"])) {
+	        optionBegin += ' selected="selected">';
+	      } else {
+		optionBegin += '>';
+	      }
+	      $("#id_url_selector").append(optionBegin + optionEnd);
 	  }        
 	  $("#id_url_selector").change();
+	  $('#id_url_selector').prop('disabled', false);
    } ,
      error: function(x,y,z) {
           alert("No se han podido obtener las colecciones");
@@ -25,14 +32,15 @@ $(document).ready( function() {
        $('input[name="url"]').val($("#id_url_selector option:selected").val());
   });
   $("#fitem_id_find").appendTo("#fitem_id_base_url");
-  
+  $('#id_url_selector').prop('disabled', true);
+
   
   var url = $('input[name="url"]').val();
   if (url != "") {
      var pathArray =  url.split("/sword/deposit/" );
      $("#id_base_url").val(pathArray[0]); 
-     getCollections();
-     console.log($("#id_url_selector > option"));
+     getCollections(pathArray[1]);
+     
      
      //.each(function()  {
         //alert($(this).val());
