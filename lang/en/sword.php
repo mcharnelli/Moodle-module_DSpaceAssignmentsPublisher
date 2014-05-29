@@ -57,3 +57,4 @@ $string['swordname_help'] = 'This is the content of the help tooltip associated 
 $string['sword'] = 'sword';
 $string['pluginadministration'] = 'sword administration';
 $string['pluginname'] = 'sword';
+$string['selectcollection'] = 'Select a collection';

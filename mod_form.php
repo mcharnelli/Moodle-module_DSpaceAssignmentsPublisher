@@ -30,7 +30,9 @@
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot.'/course/moodleform_mod.php');
-
+   $PAGE->requires->js('/mod/sword/js/jquery.js', true);
+   $PAGE->requires->js('/mod/sword/js/mod_form.js', true);
+   $PAGE->requires->css('/mod/sword/css/mod_form.css', true);
 /**
  * Module instance settings form
  */
@@ -40,7 +42,7 @@ class mod_sword_mod_form extends moodleform_mod {
      * Defines forms elements
      */
     public function definition() {
-
+      
         $mform = $this->_form;
 
         //-------------------------------------------------------------------------------
@@ -67,15 +69,22 @@ class mod_sword_mod_form extends moodleform_mod {
         
         $mform->addElement('header', 'repository', get_string('repository', 'sword'));
         
-        $mform->addElement('text', 'url', get_string('repositoryurl', 'sword'), array('size'=>'64'));
         
+        $mform->addElement('text', 'base_url', get_string('repositoryurl', 'sword'), array('size'=>'50'));
+         $mform->setType('base_url', PARAM_CLEAN);
+        
+        $mform->addElement('button', 'find', "Buscar", array('onclick' => 'getCollections()'));
+        $mform->setType('find', PARAM_CLEAN);
+        
+        $mform->addElement('select', 'url_selector', get_string("selectcollection",'sword'));
+        $mform->addRule('url_selector', null, 'required', null, 'client');
          if (!empty($CFG->formatstringstriptags)) {
-            $mform->setType('url', PARAM_TEXT);
+            $mform->setType('url_selector', PARAM_TEXT);
         } else {
-            $mform->setType('url', PARAM_CLEAN);
+            $mform->setType('url_selector', PARAM_CLEAN);
         }
-        
-        $mform->addRule('url', null, 'required', null, 'client');
+        $mform->addElement('hidden','url', array("id" => "url"));
+        $mform->setType('url', PARAM_CLEAN);
         
         $mform->addElement('text', 'username', get_string('username', 'sword'), array('size'=>'64'));
         
@@ -142,4 +151,8 @@ class mod_sword_mod_form extends moodleform_mod {
         // add standard buttons, common to all modules
         $this->add_action_buttons();
     }
+    
+
+    
+    
 }

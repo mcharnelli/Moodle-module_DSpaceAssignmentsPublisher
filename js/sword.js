@@ -13,7 +13,6 @@ function recuperarValores()
 }
 
 function enviar(course_id,assignment_id, swordid)
-
 {
 
   submissions =recuperarValores();
