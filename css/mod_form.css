@@ -1,0 +1,19 @@
+#fitem_id_base_url {
+float:left;
+width:auto;
+clear:none;
+}
+#fitem_id_find {
+ display:inline-block;
+ width:auto;
+ margin:0px;
+}
+
+
+
+#region-main .mform:not(.unresponsive) #fitem_id_base_url .femptylabel .felement {
+ margin-top:0px !important;
+}
+ #fitem_id_base_url  > .felement   {
+width:auto !important;
+}

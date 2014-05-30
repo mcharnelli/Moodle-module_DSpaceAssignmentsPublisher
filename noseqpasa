@@ -1,0 +1,135 @@
+Hola Emi llegaste/tmp/moodle/sword_jkiF3K.ziprepositorio.info.unlp.edu.ar/swordv2/collection/123456789/244<br />
+<b>Notice</b>:  Undefined index: sword in <b>/srv/http/moodle26/mod/sword/api/swordappentry.php</b> on line <b>198</b><br />
+<br />
+<b>Notice</b>:  Undefined index: sword in <b>/srv/http/moodle26/mod/sword/api/swordappentry.php</b> on line <b>201</b><br />
+<br />
+<b>Notice</b>:  Undefined index: sword in <b>/srv/http/moodle26/mod/sword/api/swordappentry.php</b> on line <b>204</b><br />
+<br />
+<b>Notice</b>:  Undefined index: sword in <b>/srv/http/moodle26/mod/sword/api/swordappentry.php</b> on line <b>212</b><br />
+<br />
+<b>Notice</b>:  Undefined index: sword in <b>/srv/http/moodle26/mod/sword/api/swordappentry.php</b> on line <b>223</b><br />
+SWORDAPPEntry Object
+(
+    [sac_status] => 201
+    [sac_xml] => <entry xmlns="http://www.w3.org/2005/Atom"><content type="application/zip" src="http://repositorio.info.unlp.edu.ar/swordv2/edit-media/340" /><link href="http://repositorio.info.unlp.edu.ar/swordv2/edit-media/340" rel="edit-media" type="application/zip" /><published>2014-05-26T03:00:00.000Z</published><rights type="text"></rights><updated>2014-05-26T03:00:00.000Z</updated><generator uri="http://www.dspace.org/ns/sword/2.0/" version="2.0">repositorio@info.unlp.edu.ar</generator><id>http://repositorio.info.unlp.edu.ar/swordv2/edit/340</id><link href="http://repositorio.info.unlp.edu.ar/swordv2/edit/340" rel="edit" /><link href="http://repositorio.info.unlp.edu.ar/swordv2/edit/340" rel="http://purl.org/net/sword/terms/add" /><link href="http://repositorio.info.unlp.edu.ar/swordv2/edit-media/340.atom" rel="edit-media" type="application/atom+xml; type=feed" /><packaging xmlns="http://purl.org/net/sword/terms/">http://purl.org/net/sword/package/METSDSpaceSIP</packaging><packaging xmlns="http://purl.org/net/sword/terms/">http://purl.org/net/sword/package/SimpleZip</packaging><link href="http://repositorio.info.unlp.edu.ar/swordv2/statement/340.rdf" rel="http://purl.org/net/sword/terms/statement" type="application/rdf+xml" /><link href="http://repositorio.info.unlp.edu.ar/swordv2/statement/340.atom" rel="http://purl.org/net/sword/terms/statement" type="application/atom+xml; type=feed" /><treatment xmlns="http://purl.org/net/sword/terms/">The package has been ingested and unpacked into the item.  Template metadata for the collection has been used, and a default title with the name of the file has been set</treatment><verboseDescription xmlns="http://purl.org/net/sword/terms/">[2014-05-26 00:18:55] Initialising verbose deposit
+[2014-05-26 00:18:55] Performing deposit using deposit URL: http://repositorio.info.unlp.edu.ar/swordv2/collection/123456789/244
+[2014-05-26 00:18:55] Location resolves to collection with handle: 123456789/244 and name: Python - Trabajos de Alumnos - 2010
+[2014-05-26 00:18:55] User is authorised to submit to collection
+[2014-05-26 00:18:55] Authenticated user: mcharnelli@mail.linti.unlp.edu.ar
+[2014-05-26 00:18:55] Loaded ingester: org.dspace.sword2.BinaryContentIngester
+[2014-05-26 00:18:55] Updated date added to response from item metadata where available
+[2014-05-26 00:18:55] Ingest successful
+[2014-05-26 00:18:55] Item created with internal identifier: 336
+[2014-05-26 00:18:55] Archive ingest completed successfully
+[2014-05-26 00:18:55] DSpace will store an original copy of the deposit, as well as ingesting the item into the archive
+[2014-05-26 00:18:55] Original package stored as word_YYOpqZ.zip, in item bundle org.dspace.content.Bundle@78b7118f
+[2014-05-26 00:18:55] The deposit is finished: moving it from the workspace to the workflow
+[2014-05-26 00:19:01] Total time for deposit processing: 6088 ms
+[2014-05-26 00:19:02] Initialising verbose deposit
+[2014-05-26 00:19:02] Performing deposit using deposit URL: http://repositorio.info.unlp.edu.ar/swordv2/collection/123456789/244
+[2014-05-26 00:19:02] Location resolves to collection with handle: 123456789/244 and name: Python - Trabajos de Alumnos - 2010
+[2014-05-26 00:19:02] User is authorised to submit to collection
+[2014-05-26 00:19:02] Authenticated user: mcharnelli@mail.linti.unlp.edu.ar
+[2014-05-26 00:19:02] Loaded ingester: org.dspace.sword2.BinaryContentIngester
+[2014-05-26 00:19:02] Updated date added to response from item metadata where available
+[2014-05-26 00:19:02] Ingest successful
+[2014-05-26 00:19:02] Item created with internal identifier: 337
+[2014-05-26 00:19:02] Archive ingest completed successfully
+[2014-05-26 00:19:02] DSpace will store an original copy of the deposit, as well as ingesting the item into the archive
+[2014-05-26 00:19:02] Original package stored as word_wCXAlB.zip, in item bundle org.dspace.content.Bundle@7b11ed3
+[2014-05-26 00:19:02] The deposit is finished: moving it from the workspace to the workflow
+[2014-05-26 00:19:08] Total time for deposit processing: 5803 ms
+[2014-05-26 11:52:55] Initialising verbose deposit
+[2014-05-26 11:52:55] Performing deposit using deposit URL: http://repositorio.info.unlp.edu.ar/swordv2/collection/123456789/244
+[2014-05-26 11:52:55] Location resolves to collection with handle: 123456789/244 and name: Python - Trabajos de Alumnos - 2010
+[2014-05-26 11:52:55] User is authorised to submit to collection
+[2014-05-26 11:52:55] Authenticated user: mcharnelli@mail.linti.unlp.edu.ar
+[2014-05-26 11:52:55] Loaded ingester: org.dspace.sword2.BinaryContentIngester
+[2014-05-26 11:52:55] Updated date added to response from item metadata where available
+[2014-05-26 11:52:55] Ingest successful
+[2014-05-26 11:52:55] Item created with internal identifier: 338
+[2014-05-26 11:52:55] Archive ingest completed successfully
+[2014-05-26 11:52:55] DSpace will store an original copy of the deposit, as well as ingesting the item into the archive
+[2014-05-26 11:52:55] Original package stored as word_HCBegA.zip, in item bundle org.dspace.content.Bundle@41d02c36
+[2014-05-26 11:52:55] The deposit is finished: moving it from the workspace to the workflow
+[2014-05-26 11:53:00] Total time for deposit processing: 5415 ms
+[2014-05-26 12:06:07] Initialising verbose deposit
+[2014-05-26 12:06:07] Performing deposit using deposit URL: http://repositorio.info.unlp.edu.ar/swordv2/collection/123456789/244
+[2014-05-26 12:06:07] Location resolves to collection with handle: 123456789/244 and name: Python - Trabajos de Alumnos - 2010
+[2014-05-26 12:06:07] User is authorised to submit to collection
+[2014-05-26 12:06:07] Authenticated user: mcharnelli@mail.linti.unlp.edu.ar
+[2014-05-26 12:06:07] Loaded ingester: org.dspace.sword2.BinaryContentIngester
+[2014-05-26 12:06:07] Updated date added to response from item metadata where available
+[2014-05-26 12:06:07] Ingest successful
+[2014-05-26 12:06:07] Item created with internal identifier: 339
+[2014-05-26 12:06:07] Archive ingest completed successfully
+[2014-05-26 12:06:07] DSpace will store an original copy of the deposit, as well as ingesting the item into the archive
+[2014-05-26 12:06:07] Original package stored as area archivo-Usuario.zip, in item bundle org.dspace.content.Bundle@60db8f43
+[2014-05-26 12:06:07] The deposit is finished: moving it from the workspace to the workflow
+[2014-05-26 12:06:12] Total time for deposit processing: 5369 ms
+[2014-05-26 12:07:28] Initialising verbose deposit
+[2014-05-26 12:07:28] Performing deposit using deposit URL: http://repositorio.info.unlp.edu.ar/swordv2/collection/123456789/244
+[2014-05-26 12:07:28] Location resolves to collection with handle: 123456789/244 and name: Python - Trabajos de Alumnos - 2010
+[2014-05-26 12:07:28] User is authorised to submit to collection
+[2014-05-26 12:07:28] Authenticated user: mcharnelli@mail.linti.unlp.edu.ar
+[2014-05-26 12:07:28] Loaded ingester: org.dspace.sword2.BinaryContentIngester
+[2014-05-26 12:07:28] Updated date added to response from item metadata where available
+[2014-05-26 12:07:28] Ingest successful
+[2014-05-26 12:07:28] Item created with internal identifier: 340
+[2014-05-26 12:07:28] Archive ingest completed successfully
+[2014-05-26 12:07:28] DSpace will store an original copy of the deposit, as well as ingesting the item into the archive
+[2014-05-26 12:07:28] Original package stored as word_jkiF3K.zip, in item bundle org.dspace.content.Bundle@5108f074
+[2014-05-26 12:07:28] The deposit is finished: moving it from the workspace to the workflow
+[2014-05-26 12:07:33] Total time for deposit processing: 5408 ms
+</verboseDescription><link href="http://repositorio.info.unlp.edu.ar/swordv2/edit-media/bitstream/716/word_jkiF3K.zip" rel="http://purl.org/net/sword/terms/originalDeposit" type="application/octet-stream" /></entry>
+    [sac_statusmessage] => Created
+    [sac_id] => SimpleXMLElement Object
+        (
+            [0] => http://repositorio.info.unlp.edu.ar/swordv2/edit/340
+        )
+
+    [sac_content_src] => SimpleXMLElement Object
+        (
+            [0] => http://repositorio.info.unlp.edu.ar/swordv2/edit-media/340
+        )
+
+    [sac_content_type] => SimpleXMLElement Object
+        (
+            [0] => application/zip
+        )
+
+    [sac_authors] => Array
+        (
+        )
+
+    [sac_contributors] => Array
+        (
+        )
+
+    [sac_links] => Array
+        (
+            [0] => SWORDAPPLink Object
+                (
+                    [sac_linktype] => SimpleXMLElement Object
+                        (
+                            [0] => application/zip
+                        )
+
+                    [sac_linkrel] => SimpleXMLElement Object
+                        (
+                            [0] => edit-media
+                        )
+
+                    [sac_linkhref] => SimpleXMLElement Object
+                        (
+                            [0] => http://repositorio.info.unlp.edu.ar/swordv2/edit-media/340
+                        )
+
+                )
+
+            [1] => SWORDAPPLink Object
+                (
+                    [sac_linktype] => 
+                    [sac_linkrel] => SimpleXMLElement Object
+                        (
+                            [0] =
