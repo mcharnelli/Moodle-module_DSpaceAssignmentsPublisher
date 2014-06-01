@@ -57,3 +57,4 @@ $string['sword'] = 'SWORD';
 $string['pluginadministration'] = 'sword administration';
 $string['pluginname'] = 'SWORD';
 $string['selectcollection'] = 'Seleccione una colección';
+$string['publish_status']   = "Estado de envío";

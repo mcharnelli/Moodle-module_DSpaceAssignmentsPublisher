@@ -29,8 +29,9 @@
     <TABLE NAME="sword_submissions" COMMENT="Default comment for sword, please edit me" PREVIOUS="sword" >
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="submission"/>
-	<FIELD NAME="submission" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="  belongs to" PREVIOUS="id" NEXT="status"/>
-        <FIELD NAME="status" TYPE="char" LENGTH="100" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="  belongs to" PREVIOUS="submission"/>        
+	<FIELD NAME="submission" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="  belongs to" PREVIOUS="id" NEXT="type"/>
+        <FIELD NAME="type" TYPE="char" LENGTH="15" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="  belongs to" PREVIOUS="submission" NEXT="status"/>
+	<FIELD NAME="status" TYPE="char" LENGTH="100" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="  belongs to" PREVIOUS="submission"/>        
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

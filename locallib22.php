@@ -288,7 +288,7 @@ class sword_lib
 		    try{
 		        $sac = new SWORDAPPClient();
 		        $dr = $sac->deposit($url, $user, $pw, '', $package, $packageformat,$contenttype, false);		   		   
-		        print_r($dr);
+		        
 			if ($dr->sac_status!=201) {  
 			      $status='error';
 			      $error = true;
@@ -424,17 +424,16 @@ class sword_base extends assignment_base
         //hook to allow plagiarism plugins to update status/print links.
         echo plagiarism_update_status($this->course, $this->cm);
 
-        $course_context = get_context_instance(CONTEXT_COURSE, $course->id);
+        
+        $course_context = context_course::instance($course->id);
         if (has_capability('gradereport/grader:view', $course_context) && has_capability('moodle/grade:viewall', $course_context)) {
             echo '<div class="allcoursegrades"><a href="' . $CFG->wwwroot . '/grade/report/grader/index.php?id=' . $course->id . '">'
                 . get_string('seeallcoursegrades', 'grades') . '</a></div>';
         }
 
-        if (!empty($message)) {
-            echo $message;   // display messages here if any
-        }
 
-        $context = get_context_instance(CONTEXT_MODULE, $cm->id);
+        
+        $context = context_module::instance($cm->id);
 
     /// Check to see if groups aredisplay_submissions being used in this assignment
 
@@ -817,7 +816,7 @@ class sword_base extends assignment_base
                 
                
                 
-                 echo '<input type="button" onclick="enviar('.$this->cm->id.' ,'. $this->cm->instance.' ,'. $this->swordid.')"  value="'.get_string('swordall', 'assignment').'" />';
+                 echo '<input type="button" onclick="enviar('.$this->cm->id.' ,'. $this->cm->instance.' ,'. $this->swordid.')"  value="'.get_string('sendtorepo', 'sword').'" />';
                                   
                  
                

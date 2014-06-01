@@ -16,7 +16,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 defined('MOODLE_INTERNAL') || die();
-
+;
 require_once($CFG->libdir . '/accesslib.php');
 require_once($CFG->libdir . '/formslib.php');
 require_once($CFG->dirroot . '/repository/lib.php');
@@ -26,10 +26,11 @@ require_once($CFG->dirroot . '/grade/grading/lib.php');
 require_once($CFG->dirroot . '/mod/assign/feedbackplugin.php');
 require_once($CFG->dirroot . '/mod/assign/submissionplugin.php');
 require_once($CFG->dirroot . '/mod/assign/renderable.php');
-require_once($CFG->dirroot . '/mod/assign/gradingtable.php');
+require_once($CFG->dirroot . '/mod/sword/sword_gradingtable.php');
 require_once($CFG->libdir . '/eventslib.php');
 require_once($CFG->libdir . '/portfolio/caller.php');
 require_once($CFG->dirroot . '/mod/sword/sword_submissions_form.php');
+require_once($CFG->dirroot . '/mod/sword/renderer.php');
 /**
  * Internal library of functions for module sword
  *
@@ -54,6 +55,9 @@ class sword_assign extends assign {
   private $cm;
   private $submissionplugins;
   private $feedbackplugins;
+  
+  /** @var assign_renderer the custom renderer for this module */
+  private $output;
   
   public function __construct($context,$cm,$course,$sword,$assignment)
   {
@@ -229,7 +233,19 @@ public function view( $action='grading') {
 
         return $o;
     }
-    
+        /**
+     * Lazy load the page renderer and expose the renderer to plugins.
+     *
+     * @return assign_renderer
+     */
+    public function get_renderer() {
+        global $PAGE;
+        if ($this->output) {
+            return $this->output;
+        }
+        $this->output = $PAGE->get_renderer('mod_sword');
+        return $this->output;
+    }
     
     /**
      * View entire grading page.
@@ -246,7 +262,7 @@ public function view( $action='grading') {
 
         // Only load this if it is.
 
-        $o .= $this->view_grading_table();
+        $o .= $this->view_publish_table();
 
         $o .= $this->view_footer();
 
@@ -261,7 +277,7 @@ public function view( $action='grading') {
      *
      * @return string
      */
-    protected function view_grading_table() {
+    protected function view_publish_table() {
         global $USER, $CFG;
 
         // Include grading options form.
@@ -420,14 +436,15 @@ public function view( $action='grading') {
 
         // Load and print the table of submissions.
       /*  if ($showquickgrading && $quickgrading) {
-            $gradingtable = new assign_grading_table($this, $perpage, $filter, 0, true);
+            $gradingtable = new assign_publish_table($this, $perpage, $filter, 0, true);
             $table = $this->get_renderer()->render($gradingtable);
             $quickformparams = array('cm'=>$this->get_course_module()->id, 'gradingtable'=>$table);
             $quickgradingform = new mod_assign_quick_grading_form(null, $quickformparams);
 
             $o .= $this->get_renderer()->render(new assign_form('quickgradingform', $quickgradingform));
         } else {
-        */    $gradingtable = new assign_grading_table($this, $perpage, $filter, 0, false);
+        */ 
+        $gradingtable = new sword_publish_table($this, $perpage, $filter, 0, false);
             $o .= $this->get_renderer()->render($gradingtable);
         //}
 

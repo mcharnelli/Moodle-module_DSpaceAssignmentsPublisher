@@ -58,3 +58,4 @@ $string['sword'] = 'sword';
 $string['pluginadministration'] = 'sword administration';
 $string['pluginname'] = 'sword';
 $string['selectcollection'] = 'Select a collection';
+$string['publish_status']   = "Publish status";
