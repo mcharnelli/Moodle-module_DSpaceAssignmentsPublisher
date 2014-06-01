@@ -59,3 +59,5 @@ $string['pluginadministration'] = 'sword administration';
 $string['pluginname'] = 'sword';
 $string['selectcollection'] = 'Select a collection';
 $string['publish_status']   = "Publish status";
+$string['search_collection'] = "Search the collection";
+$string['url_collection'] = "Enter the collection's URL";

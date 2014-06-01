@@ -8,7 +8,6 @@ $PAGE->requires->js('/mod/sword/js/jquery.js', true);
 
 
 $id   = optional_param('id', 0, PARAM_INT);          // Course module ID
-$swordid =  optional_param('sword', 0, PARAM_INT); // SWORD ID
 $assigment    = optional_param('assignment', 0, PARAM_INT);           // Assignment ID
 $mode = optional_param('mode', 'all', PARAM_ALPHA);  // What mode are we in?
 
@@ -54,7 +53,7 @@ $PAGE->requires->js('/mod/assignment/assignment.js');
 require($CFG->dirroot.'/mod/sword/type/'.$assignment->assignmenttype.'/assignment.class.php');
 $assignmentclass = 'sword_'.$assignment->assignmenttype;
 $assignmentinstance = new $assignmentclass($cm->id, $assignment, $cm, $course);
-$assignmentinstance->set_sword_ID($swordid);
+$assignmentinstance->set_sword_ID($id);
 $assignmentinstance->display_submissions($mode);
 
    

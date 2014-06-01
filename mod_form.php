@@ -31,7 +31,11 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot.'/course/moodleform_mod.php');
    $PAGE->requires->js('/mod/sword/js/jquery.js', true);
+   $PAGE->requires->js('/mod/sword/js/jquery-ui-1.10.4.custom.min.js', true);
    $PAGE->requires->js('/mod/sword/js/mod_form.js', true);
+   $PAGE->requires->css('/mod/sword/css/blitzer/jquery-ui-1.10.4.custom.css', true);
+
+
    $PAGE->requires->css('/mod/sword/css/mod_form.css', true);
 /**
  * Module instance settings form
@@ -61,7 +65,7 @@ class mod_sword_mod_form extends moodleform_mod {
         $mform->addHelpButton('name', 'swordname', 'sword');
 
         // Adding the standard "intro" and "introformat" fields
-        //$this->add_intro_editor();
+       // $this->add_intro_editor(true, get_string('description', 'assignment'));
 
         //-------------------------------------------------------------------------------
         // Adding the rest of sword settings, spreeading all them into this fieldset
@@ -69,23 +73,30 @@ class mod_sword_mod_form extends moodleform_mod {
         
         $mform->addElement('header', 'repository', get_string('repository', 'sword'));
         
-        
+         $mform->addElement('html', '<div id="accordion">');
+         $mform->addElement('html', '<h3>' . get_string("search_collection","sword") . "</h3>");
+         
+         $mform->addElement('html', '<div>');
         $mform->addElement('text', 'base_url', get_string('repositoryurl', 'sword'), array('size'=>'50'));
          $mform->setType('base_url', PARAM_CLEAN);
         
-        $mform->addElement('button', 'find', "Buscar", array('onclick' => 'getCollections(null)'));
+        $mform->addElement('button', 'find', get_string("search"), array('onclick' => 'getCollections(null)'));
         $mform->setType('find', PARAM_CLEAN);
+       
+         $mform->addElement('select', 'url_selector', get_string("selectcollection",'sword'));
         
-        $mform->addElement('select', 'url_selector', get_string("selectcollection",'sword'));
-        $mform->addRule('url_selector', null, 'required', null, 'client');
          if (!empty($CFG->formatstringstriptags)) {
             $mform->setType('url_selector', PARAM_TEXT);
         } else {
             $mform->setType('url_selector', PARAM_CLEAN);
         }
+        $mform->addElement('html', '</div>'); 
+         $mform->addElement('html', '<h3>' . get_string("url_collection","sword") . "</h3>");         
+         $mform->addElement('html', '<div>');
         $mform->addElement('text','url', "Url de la colección",array("id" => "url","size"=>"64"));
         $mform->setType('url', PARAM_CLEAN);
-        
+        $mform->addElement('html', '</div>');
+        $mform->addElement('html', '</div>');
         $mform->addElement('text', 'username', get_string('username', 'sword'), array('size'=>'64'));
         
           if (!empty($CFG->formatstringstriptags)) {
@@ -95,7 +106,7 @@ class mod_sword_mod_form extends moodleform_mod {
         }
         
         $mform->addRule('username', null, 'required', null, 'client');
-        $mform->addElement('text', 'password', get_string('password', 'sword'), array('size'=>'64'));
+        $mform->addElement('password', 'password', get_string('password', 'sword'), array('size'=>'64'));
         
            if (!empty($CFG->formatstringstriptags)) {
             $mform->setType('password', PARAM_TEXT);

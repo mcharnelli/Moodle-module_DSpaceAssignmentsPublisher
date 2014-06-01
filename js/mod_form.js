@@ -6,7 +6,8 @@ function getCollections(selected){
      processData : true,
      data: {url: url},
      dataType: "json",
-     success: function(json) {          
+     success: function(json) {       
+       $("#id_url_selector").empty();
 	  for (var key in json) {
 	      collection = json[key];
 	      optionBegin = '<option value="' + url + '/sword/deposit/' + collection["handle"] + '"';
@@ -20,14 +21,18 @@ function getCollections(selected){
 	  }        
 	  $("#id_url_selector").change();
 	  $('#id_url_selector').prop('disabled', false);
+	  
    } ,
      error: function(x,y,z) {
+          $("#accordion").children("h3").eq(1).click();
           alert("No se han podido obtener las colecciones");
      } 
   });
 
 }
 $(document).ready( function() {  
+  $( "#accordion" ).accordion();
+
   $("#id_url_selector").change( function() {
        $('input[name="url"]').val($("#id_url_selector option:selected").val());
   });

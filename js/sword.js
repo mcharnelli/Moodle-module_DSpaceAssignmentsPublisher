@@ -26,9 +26,9 @@ function enviar(course_id,assignment_id, swordid)
      swordid:swordid 
     },
      function(data, textStatus, jqXHR) {
-           $("body").removeClass("loading"); 
-	   
-	  alert(data);	 
+           $("body").removeClass("loading"); 	   
+	  alert(data);	
+	  location.reload(true);
      }
   );
   } else { 

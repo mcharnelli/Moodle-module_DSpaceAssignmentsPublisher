@@ -66,9 +66,7 @@ $PAGE->set_context($context);
 // Output starts here
 echo $OUTPUT->header();
 
-if ($sword->intro) { // Conditions to show the intro can change to look for own settings or whatever
-    echo $OUTPUT->box(format_module_intro('sword', $sword, $cm->id), 'generalbox mod_introbox', 'swordintro');
-}
+
 
 //code
 echo $OUTPUT->heading(get_string('assignment_list', 'sword'));
@@ -76,7 +74,6 @@ echo $OUTPUT->heading(get_string('assignment_list', 'sword'));
 $sql = 'SELECT cm.id, a.name
 FROM {course_modules} cm
 INNER JOIN {assign} a ON a.id = cm.instance
-INNER JOIN {assignsubmission_file} asf ON asf.id=a.id
 WHERE cm.course = a.course
 AND module = (
 SELECT id
@@ -125,7 +122,7 @@ foreach($tareas as $tarea) {
   $url=html_writer::link(  
                          new moodle_url('/mod/sword/submissions22.php', 
                                       array('id'=> $cm->id,                                             
-                                            'assignment' => $tarea->id, 'sword' => $sword->id)),
+                                            'assignment' => $tarea->id)),
                         $tarea->name);
   $fila->cells[0] = $url;
   $table->data[]=$fila;

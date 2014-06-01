@@ -49,8 +49,7 @@ require_once($CFG->dirroot.'/mod/assign/locallib.php');
 
 class sword_assign extends assign {
   
-  private $sword;  
-  private $assignment;
+  private $cm_sword;  
   private $context;
   private $cm;
   private $submissionplugins;
@@ -59,13 +58,12 @@ class sword_assign extends assign {
   /** @var assign_renderer the custom renderer for this module */
   private $output;
   
-  public function __construct($context,$cm,$course,$sword,$assignment)
+  public function __construct($context,$cm,$course, $cm_sword)
   {
      parent::__construct($context, $cm, $course);     
      $this->cm      = $cm;
-     $this->context = $context;
-     $this->sword   = $sword;     
-     $this->assignment = $assignment;
+     $this->context = $context;   
+     $this->cm_sword = $cm_sword;
      
      $this->submissionplugins = $this->load_plugins('assignsubmission');
      $this->feedbackplugins = $this->load_plugins('assignfeedback');
@@ -79,9 +77,9 @@ public function view( $action='grading') {
         $notices = array();
         $nextpageparams = array();
         
-        $swordid  = $this->sword;
+        $swordid  = $this->cm_sword->id;
         $cm  = $this->cm;
-        $assignment  = $this->assignment;
+        //$assignment  = $this->assignment;
         
 
         if (!empty($this->get_course_module()->id)) {
@@ -344,7 +342,7 @@ public function view( $action='grading') {
         //$gradingmanager = get_grading_manager($this->get_context(), 'mod_assign', 'submissions');
 
         $perpage = get_user_preferences('assign_perpage', 10);
-        $filter = get_user_preferences('assign_filter', '');
+        $filter = ASSIGN_FILTER_SUBMITTED;
         $markerfilter = get_user_preferences('assign_markerfilter', '');
         $workflowfilter = get_user_preferences('assign_workflowfilter', '');
         //$controller = $gradingmanager->get_active_controller();
@@ -374,28 +372,11 @@ public function view( $action='grading') {
             $markingworkflowoptions = array_merge($markingworkflowoptions, $this->get_marking_workflow_states_for_current_user());
         }
 
-        // Print options for changing the filter and changing the number of results per page.
-        $gradingoptionsformparams = array('cm'=>$cmid,
-                                          'contextid'=>$this->context->id,
-                                          'userid'=>$USER->id,
-                                          'submissionsenabled'=>$this->is_any_submission_plugin_enabled(),
-                                         // 'showquickgrading'=>$showquickgrading,
-                                         // 'quickgrading'=>$quickgrading,
-                                          'markingworkflowopt'=>$markingworkflowoptions,
-                                          'markingallocationopt'=>$markingallocationoptions,
-                                          'showonlyactiveenrolopt'=>$showonlyactiveenrolopt,
-                                          'showonlyactiveenrol'=>$this->show_only_active_users());
-
-        $classoptions = array('class'=>'gradingoptionsform');
-        $gradingoptionsform = new mod_sword_grading_options_form(null,
-                                                                  $gradingoptionsformparams,
-                                                                  'post',
-                                                                  '',
-                                                                  $classoptions);
+       
 
         $batchformparams = array('course'    =>$this->cm->course,
-                                 'sword'     => $this->sword,
-                                 'assignment'=> $this->assignment);
+                                 'sword'     => $this->cm_sword->id,
+                                 'assignment'=> $this->cm->id);
         $classoptions = array('class'=>'sword_form');
         
       
@@ -405,12 +386,6 @@ public function view( $action='grading') {
                                                                '',
                                                                $classoptions);
 	
-        $gradingoptionsdata = new stdClass();
-        $gradingoptionsdata->perpage = $perpage;
-        $gradingoptionsdata->filter = $filter;
-        $gradingoptionsdata->markerfilter = $markerfilter;
-        $gradingoptionsdata->workflowfilter = $workflowfilter;
-        $gradingoptionsform->set_data($gradingoptionsdata);
 
      //  $actionformtext = $this->get_renderer()->render($gradingactions);
         $header = new assign_header($this->get_instance(),
@@ -444,7 +419,7 @@ public function view( $action='grading') {
             $o .= $this->get_renderer()->render(new assign_form('quickgradingform', $quickgradingform));
         } else {
         */ 
-        $gradingtable = new sword_publish_table($this, $perpage, $filter, 0, false);
+        $gradingtable = new sword_publish_table($this, $perpage, $filter, 0, false,null, $this->cm_sword);
             $o .= $this->get_renderer()->render($gradingtable);
         //}
 
@@ -455,10 +430,7 @@ public function view( $action='grading') {
             $assignform = new assign_form('gradingbatchoperationsform', $gradingbatchoperationsform);
             $o .= $this->get_renderer()->render($assignform);
         }
-        $assignform = new assign_form('gradingoptionsform',
-                                      $gradingoptionsform,
-                                      'M.mod_assign.init_grading_options');
-        $o .= $this->get_renderer()->render($assignform);
+      
         return $o;
     }
     
@@ -549,7 +521,7 @@ public function view( $action='grading') {
      * @return string - If an error occurs, this will contain the error page.
      */
     public function sword_submissions($userselected) {
-        echo("Hola Emi llegaste");
+        
         global $CFG, $DB;
         $context = context_module::instance($this->cm->id);
         
@@ -582,6 +554,7 @@ public function view( $action='grading') {
         }
 
        $error = false;
+           $sword_metadata=$DB->get_record('sword', array('id' => $this->cm_sword->instance));
         // Get all the files for each student.
         foreach ($students_selected as $student) {
             $userid = $student->id;
@@ -643,11 +616,11 @@ public function view( $action='grading') {
                     }
                     
                 }
-               
-                $paquete = $this->makePackage($filesdata, $this->sword, $arr, $userid, $this->assignment->id);
-                echo($paquete);
+           
+                $paquete = $this->makePackage($filesdata, $sword_metadata, $arr, $userid, $this->get_instance()->id);
+                
                             
-                 $resultado  = $this->sendToRepository($paquete,$submission->id, $this->sword);;
+                 $resultado  = $this->sendToRepository($paquete,$submission->id, $sword_metadata);
                  $error = $error ||  $resultado;
             }
         }
@@ -668,7 +641,7 @@ public function view( $action='grading') {
      * $rootout is The location to write the package out to
      * $fileout is The filename to save the package as
      */
-     private function makePackage($filesdata, $swordid, $arr, $userid,$assigid ) 
+     private function makePackage($filesdata, $sword_metadata, $arr, $userid,$assigid ) 
      {
         
         global $CFG,$DB;
@@ -699,7 +672,7 @@ public function view( $action='grading') {
         
         // add default metadata
         
-        $sword_metadata=$DB->get_record('sword', array('id' => $swordid));
+        
          if (($arr!=NULL) && ($sword_metadata->subject != NULL)) {                               
            $arr[]=$sword_metadata->subject;           
            $datos["subject"]=$arr;
@@ -787,12 +760,12 @@ public function view( $action='grading') {
      * $swordid sword instance
      * $package package to deposit
      */
-     private function sendToRepository($package, $submissionid, $swordid) {
+     private function sendToRepository($package, $submissionid, $sword) {
      global $CFG,$DB;
      
                     $dir= sys_get_temp_dir().'mets_swap_package.zip';
                   
-                    $sword=$DB->get_record('sword', array('id' => $swordid));
+                    //$sword=$DB->get_record('sword', array('id' => $swordid));
 		    
 		    // The URL of the service document
 		    $url = $sword->url;
@@ -848,13 +821,15 @@ public function view( $action='grading') {
 		   }
 		   
 		   
-		   $previous_submission = $DB->get_record('sword_submissions',array('submission'=>$submissionid));
+		   $previous_submission = $DB->get_record('sword_submissions',array('submission'=>$submissionid, 'sword'=>$swordid ,'type'=>'assign'));
 		   if ($previous_submission != NULL) {		      
 		      $previous_submission->status = $status;
 		      $DB->update_record('sword_submissions', $previous_submission);
 		   } else {
 		      $sword_submission=new stdClass();
 		      $sword_submission->submission=$submissionid;
+		      $sword_submission->sword=$sword->id;
+		      $sword_submission->type='assign';
 		      $sword_submission->status=$status;
 		      $DB->insert_record('sword_submissions', $sword_submission);
 		   }

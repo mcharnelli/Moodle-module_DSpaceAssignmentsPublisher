@@ -10,12 +10,10 @@ $PAGE->requires->css('/mod/sword/css/estilo.css', true);
 
 
 $id = required_param('id', PARAM_INT); // Course module ID
-$sword =  required_param('sword', PARAM_INT); // SWORD ID
 $assignment    = required_param('assignment', PARAM_INT);           // Assignment ID
+$cm_sword = get_coursemodule_from_id('sword', $id, 0, false, MUST_EXIST);
 
-
-$urlparams = array('id' => $id,
-                  'sword' => $sword,
+$urlparams = array('id' => $id,                  
                   'assignment' => $assignment);
                   
 $url = new moodle_url('/mod/sword/submissions.php', $urlparams);
@@ -31,7 +29,7 @@ $context = context_module::instance($cm->id);
 
 require_capability('mod/assign:view', $context);
 
-$sword_assign = new sword_assign($context,$cm,$course,$sword,$assignment);
+$sword_assign = new sword_assign($context,$cm,$course, $cm_sword);
 $completion=new completion_info($course);
 $completion->set_module_viewed($cm);
 

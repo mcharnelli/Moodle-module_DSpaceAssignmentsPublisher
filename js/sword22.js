@@ -22,11 +22,12 @@ function enviar(course_id,assignment_id, swordid)
     {id:course_id,
      assignment_id:assignment_id,
      submissions:submissions,
-     swordid:swordid 
+     sword_cm_id:swordid 
     },
      function(data, textStatus, jqXHR) {
            $("body").removeClass("loading"); 
 	  alert(data);	 
+	   location.reload(true);
      }
   );
   

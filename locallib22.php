@@ -80,6 +80,10 @@ class sword_lib
             $groupname = groups_get_group_name($groupid).'-';
         }
         $error = false;
+        
+        $cm_sword = get_coursemodule_from_id('sword', $swordid, 0, false, MUST_EXIST);
+        $sword=$DB->get_record('sword', array('id' => $cm_sword->instance));
+        
         foreach ($select_submissions as $submission) {
             
             $a_userid = $submission->userid; //get userid
@@ -98,9 +102,10 @@ class sword_lib
                       } 
                       
                       $this->copyFileToTemp($file);
-                      $paquete = $this->makePackage($files, $swordid, $arr, $a_userid, $assignment_type->assignment->id);
                       
-                      $resultado  = $this->sendToRepository($paquete,$submission->id, $swordid);;
+                      $paquete = $this->makePackage($files, $sword, $arr, $a_userid, $assignment_type->assignment->id);
+                      
+                      $resultado  = $this->sendToRepository($paquete,$submission->id, $sword);;
                       $error = $error ||  $resultado;
                     }
                     
@@ -124,7 +129,7 @@ class sword_lib
      * $rootout is The location to write the package out to
      * $fileout is The filename to save the package as
      */
-     private function makePackage($files, $swordid, $arr, $userid,$assigid ) 
+     private function makePackage($files, $sword_metadata, $arr, $userid,$assigid ) 
      {
         global $CFG,$DB;
          require_once('api/packager_mets_swap.php');
@@ -158,7 +163,7 @@ class sword_lib
         
         // add default metadata
         
-        $sword_metadata=$DB->get_record('sword', array('id' => $swordid));
+        
          if (($arr!=NULL) && ($sword_metadata->subject != NULL)) {                               
            $arr[]=$sword_metadata->subject;           
            $datos["subject"]=$arr;
@@ -245,12 +250,11 @@ class sword_lib
      * $swordid sword instance
      * $package package to deposit
      */
-     private function sendToRepository($package, $submissionid, $swordid) {
+     private function sendToRepository($package, $submissionid, $sword) {
      global $CFG,$DB;
      
-                    $dir= sys_get_temp_dir().'mets_swap_package.zip';
-                  
-                    $sword=$DB->get_record('sword', array('id' => $swordid));
+                    $dir= sys_get_temp_dir().'mets_swap_package.zip';                  
+                    
 		    
 		    // The URL of the service document
 		    $url = $sword->url;
@@ -287,6 +291,7 @@ class sword_lib
 		    $error = false;
 		    try{
 		        $sac = new SWORDAPPClient();
+		        
 		        $dr = $sac->deposit($url, $user, $pw, '', $package, $packageformat,$contenttype, false);		   		   
 		        
 			if ($dr->sac_status!=201) {  
@@ -297,19 +302,22 @@ class sword_lib
 			      $error = false;
 			}
 		
-		   } catch(Exception $e){		      
+		   } catch(Exception $e){	
+		      
 		      $status='error';
 		      $error = true;
 		   }
 		   
 		   
-		   $previous_submission = $DB->get_record('sword_submissions',array('submission'=>$submissionid));
+		   $previous_submission = $DB->get_record('sword_submissions',array('submission'=>$submissionid, 'sword'=>$sword->id,'type'=>'assignment'));
 		   if ($previous_submission != NULL) {		      
 		      $previous_submission->status = $status;
 		      $DB->update_record('sword_submissions', $previous_submission);
 		   } else {
 		      $sword_submission=new stdClass();
 		      $sword_submission->submission=$submissionid;
+		      $sword_submission->sword=$sword->id;
+		      $sword_submission->type='assignment';
 		      $sword_submission->status=$status;
 		      $DB->insert_record('sword_submissions', $sword_submission);
 		   }
@@ -337,10 +345,11 @@ class sword_lib
 }
 class sword_base extends assignment_base 
 {
-  protected  $swordid;
+  protected  $cm_sword;
    public function set_sword_ID($id)
    {
-    $this->swordid=$id;
+    $this->cm_sword = get_coursemodule_from_id('sword', $id, 0, false, MUST_EXIST);
+   
    }
     /**
      *  Display all the submissions ready for grading
@@ -599,14 +608,17 @@ class sword_base extends assignment_base
             $select = "SELECT $ufields,
                               s.id AS submissionid, s.grade, s.submissioncomment,
                               s.timemodified, s.timemarked,
+                              ss.status as pub_status,
                               CASE WHEN s.timemarked > 0 AND s.timemarked >= s.timemodified THEN 1
                                    ELSE 0 END AS status ";
 
             $sql = 'FROM {user} u '.
                    'LEFT JOIN {assignment_submissions} s ON u.id = s.userid
-                    AND s.assignment = '.$this->assignment->id.' '.
+                    AND s.assignment = '.$this->assignment->id.' '.                    
+                    'LEFT JOIN {sword_submissions} ss ON ss.submission = s.id AND ss.type = \'assignment\' AND ss.sword = :sword_id' .
                    'WHERE '.$where.'u.id IN ('.implode(',',$users).') ';
 
+            $params["sword_id"] = $this->cm_sword->instance;       
             $ausers = $DB->get_records_sql($select.$sql.$sort, $params, $table->get_page_start(), $table->get_page_size());
 
             $table->pagesize($perpage, count($users));
@@ -787,11 +799,11 @@ class sword_base extends assignment_base
                         }
                         
                         
-                        $sword_submission=$DB->get_record('sword_submissions', array('submission' => $selectAssig));
+                        
                        
-                        if ($sword_submission!=NULL)  { 
+                        if ($auser->pub_status!=NULL)  { 
                            
-                           $estado=get_string($sword_submission->status, 'sword');
+                           $estado=get_string($auser->pub_status, 'sword');
                         }
                         else {
                            $estado=get_string('nosend', 'sword');
@@ -816,7 +828,7 @@ class sword_base extends assignment_base
                 
                
                 
-                 echo '<input type="button" onclick="enviar('.$this->cm->id.' ,'. $this->cm->instance.' ,'. $this->swordid.')"  value="'.get_string('sendtorepo', 'sword').'" />';
+                 echo '<input type="button" onclick="enviar('.$this->cm->id.' ,'. $this->cm->instance.' ,'. $this->cm_sword->id.')"  value="'.get_string('sendtorepo', 'sword').'" />';
                                   
                  
                
