@@ -546,7 +546,7 @@ class sword_base extends assignment_base
 
         $table->define_columns($tablecolumns);
         $table->define_headers($tableheaders);
-        $table->define_baseurl($CFG->wwwroot.'/mod/assignment/submissions.php?id='.$this->cm->id.'&amp;currentgroup='.$currentgroup);
+        $table->define_baseurl($CFG->wwwroot.'/mod/sword/submissions22.php?id='.$this->cm_sword->id.'&assignment='.$this->cm->id.'&amp;currentgroup='.$currentgroup);
 
         $table->sortable(true, 'lastname');//sorted by lastname by default
         $table->collapsible(true);
