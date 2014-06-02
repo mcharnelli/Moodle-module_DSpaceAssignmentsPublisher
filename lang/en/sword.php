@@ -37,7 +37,11 @@ $string['assignment_list']='Assignments List';
 $string['assignment']='Tarea';
 $string['msg_error']='Fail deposit';
 $string['msg_send']='Successful deposit';
-$string['modulename_help'] = 'SWORD!';
+$string['modulename_help'] = 'El módulo SWORD es una extensión del módulo de Tareas que permite a un profesor exportar las entregas realizadas por los alumnos a un repositorio digital DSpace. Dichas entregas pertenecen a cada una de las tareas creadas por el docente a través del módulo Tareas.
+Se debe crear una actividad SWORD por cada repositorio que quiera asociar. El docente debe establecer la colección donde dichos recursos se publicarán y un usuario y contraseña para poder realizar el depósito. También podrá definir valores por defecto para algunos metadatos en el estándar Dublin Core simplificado.
+A su vez, el alumno puede proveer metadatos subject (palabras claves) para completar su recurso, a través de un archivo .txt con una palabra clave por línea.
+Éste módulo recolecta, formatea e incorpora metadatos de forma automática a través del contexto donde su ubica la tarea y por medio de metadatos que el docente puede brindar.
+Funciona para los módulos Tareas y Tareas 2.2, y publica todo tipo de entrega';
 $string['nosend']='Not send';
 $string['send']='Send';
 $string['error']='Error to deposit'; 
