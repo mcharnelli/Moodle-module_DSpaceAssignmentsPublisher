@@ -32,15 +32,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-/** example constant */
-//define('NEWMODULE_ULTIMATE_ANSWER', 42);
-
-
-
-
-
-
-
 
 
 require_once($CFG->dirroot.'/mod/assignment/lib.php');

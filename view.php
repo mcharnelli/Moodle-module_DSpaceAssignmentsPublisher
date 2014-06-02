@@ -26,7 +26,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-/// (Replace sword with the name of your module and remove this line)
 
 require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 require_once(dirname(__FILE__).'/lib.php');
@@ -84,11 +83,7 @@ SELECT id
 FROM {modules}
 WHERE name = \'assign\' )';
 
-/*
-SELECT cm.id, a.name FROM mdl_course_modules cm INNER JOIN mdl_assign a ON a.id = cm.instance 
-inner join mdl_assignsubmission_file asf on asf.id = a.id WHERE cm.course = a.course AND module 
-= ( SELECT id FROM mdl_modules WHERE name = 'assign' )
-*/
+
 
 $tareas = $DB->get_records_sql($sql, array('course'=>$course->id));
 $listaTareas = array();

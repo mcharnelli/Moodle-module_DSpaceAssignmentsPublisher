@@ -286,30 +286,14 @@ public function view( $action='grading') {
         $cmid = $this->get_course_module()->id;
 
         $links = array();
-        /*if (has_capability('gradereport/grader:view', $this->get_course_context()) &&
-                has_capability('moodle/grade:viewall', $this->get_course_context())) {
-            $gradebookurl = '/grade/report/grader/index.php?id=' . $this->get_course()->id;
-            $links[$gradebookurl] = get_string('viewgradebook', 'assign');
-        }*/
         
-        //@@@ agregar botón para poder seleccionar tareas para enviar al repo
+
         if ($this->is_any_submission_plugin_enabled() && $this->count_submissions()) {
-            //$downloadurl = '/mod/assign/view.php?id=' . $cmid . '&action=sendtorepo';
-           // $downloadurl= new moodle_url('/mod/assign/view.php', array('id'=> $cmid, 'action'=>'sendtorepo'));
              $downloadurl= new moodle_url("#");
-           // $links[$downloadurl] = get_string('sendtorepo', 'assign');
+           
         }
         
-        
-        /*if ($this->is_any_submission_plugin_enabled() && $this->count_submissions()) {
-            $downloadurl = '/mod/assign/view.php?id=' . $cmid . '&action=downloadall';
-            $links[$downloadurl] = get_string('downloadall', 'assign');
-        }/*
-      /*  if ($this->is_blind_marking() &&
-                has_capability('mod/assign:revealidentities', $this->get_context())) {
-            $revealidentitiesurl = '/mod/assign/view.php?id=' . $cmid . '&action=revealidentities';
-            $links[$revealidentitiesurl] = get_string('revealidentities', 'assign');
-        }*/
+
         foreach ($this->get_feedback_plugins() as $plugin) {
             if ($plugin->is_enabled() && $plugin->is_visible()) {
                 foreach ($plugin->get_grading_actions() as $action => $description) {
@@ -326,28 +310,10 @@ public function view( $action='grading') {
         // Sort links alphabetically based on the link description.
         core_collator::asort($links);
 
-        
-    //    $gradingactions = new action_link($downloadurl, get_string('sendtorepo', 'sword'),null,array('onclick'=>
-    //                                                           "enviar(". $coursemodulecontext->id . " ,".  $cmid . " ," . $swordid . ")" ));
-        
-        
-        //echo '<input type="button" onclick= value="'.get_string('swordall', 'assignment').'" />';
-        
-        
-        
-        
-        //$gradingactions = new url_select($links);
-        //$gradingactions->set_label(get_string('choosegradingaction', 'assign'));
-
-        //$gradingmanager = get_grading_manager($this->get_context(), 'mod_assign', 'submissions');
-
         $perpage = get_user_preferences('assign_perpage', 10);
         $filter = ASSIGN_FILTER_SUBMITTED;
         $markerfilter = get_user_preferences('assign_markerfilter', '');
         $workflowfilter = get_user_preferences('assign_workflowfilter', '');
-        //$controller = $gradingmanager->get_active_controller();
-        //$showquickgrading = empty($controller);
-        //$quickgrading = get_user_preferences('assign_quickgrading', false);
         $showonlyactiveenrolopt = has_capability('moodle/course:viewsuspendedusers', $this->context);
 
         $markingallocation = $this->get_instance()->markingallocation &&
@@ -387,7 +353,7 @@ public function view( $action='grading') {
                                                                $classoptions);
 	
 
-     //  $actionformtext = $this->get_renderer()->render($gradingactions);
+ 
         $header = new assign_header($this->get_instance(),
                                     $this->get_context(),
                                     false,
@@ -410,18 +376,9 @@ public function view( $action='grading') {
         }
 
         // Load and print the table of submissions.
-      /*  if ($showquickgrading && $quickgrading) {
-            $gradingtable = new assign_publish_table($this, $perpage, $filter, 0, true);
-            $table = $this->get_renderer()->render($gradingtable);
-            $quickformparams = array('cm'=>$this->get_course_module()->id, 'gradingtable'=>$table);
-            $quickgradingform = new mod_assign_quick_grading_form(null, $quickformparams);
-
-            $o .= $this->get_renderer()->render(new assign_form('quickgradingform', $quickgradingform));
-        } else {
-        */ 
         $gradingtable = new sword_publish_table($this, $perpage, $filter, 0, false,null, $this->cm_sword);
             $o .= $this->get_renderer()->render($gradingtable);
-        //}
+      
 
         $currentgroup = groups_get_activity_group($this->get_course_module(), true);
         $users = array_keys($this->list_participants($currentgroup, true));
@@ -466,50 +423,17 @@ public function view( $action='grading') {
                                                               
 
         if ($data = $mform->get_data()) {
-            // Get the list of users.
-            $users = $data->selectedusers;
-            $userlist = explode(',', $users);
+	      // Get the list of users.
+	      $users = $data->selectedusers;
+	      $userlist = explode(',', $users);
 
-            $prefix = 'plugingradingbatchoperation_';
+	      $prefix = 'plugingradingbatchoperation_';
 
-           /* if ($data->operation == 'grantextension') {
-                // Reset the form so the grant extension page will create the extension form.
-                $mform = null;
-                return 'grantextension';
-            } else if ($data->operation == 'setmarkingworkflowstate') {
-                return 'viewbatchsetmarkingworkflowstate';
-            } else if ($data->operation == 'setmarkingallocation') {
-                return 'viewbatchmarkingallocation';
-            } else if (strpos($data->operation, $prefix) === 0) {
-                $tail = substr($data->operation, strlen($prefix));
-                list($plugintype, $action) = explode('_', $tail, 2);
-
-                $plugin = $this->get_feedback_plugin_by_type($plugintype);
-                if ($plugin) {
-                    return 'plugingradingbatchoperation';
-                }
-            }*/
-           // throw new Exception('Hola samigos');
-           $this->sword_submissions($userlist);
-            //foreach ($userlist as $userid) {
-               // if ($data->operation == 'lock') {
-               //throw new Exception('Hola samigos' . $userid);
-              //    $this->process_send_to_repository($userid);
-                 
-                /*} else if ($data->operation == 'unlock') {
-                    $this->process_unlock_submission($userid);
-                } else if ($data->operation == 'reverttodraft') {
-                    $this->process_revert_to_draft($userid);
-                } else if ($data->operation == 'addattempt') {
-                    if (!$this->get_instance()->teamsubmission) {
-                        $this->process_add_attempt($userid);
-                    }
-                }*/
-            //}
-           if ($this->get_instance()->teamsubmission && $data->operation == 'addattempt') {
-                // This needs to be handled separately so that each team submission is only re-opened one time.
-                $this->process_add_attempt_group($userlist);
-            }
+	      $this->sword_submissions($userlist);
+	      if ($this->get_instance()->teamsubmission && $data->operation == 'addattempt') {
+		  // This needs to be handled separately so that each team submission is only re-opened one time.
+		  $this->process_add_attempt_group($userlist);
+	      }
         }
 
         $this->view2('grading');
@@ -792,7 +716,7 @@ public function view( $action='grading') {
 		    $contenttype = "application/zip";
 
 		    //$packageformat="http://purl.org/net/sword-types/METSDSpaceSIP";
-		      $packageformat="http://purl.org/net/sword-types/METSDSpaceSIP";
+		    $packageformat="http://purl.org/net/sword-types/METSDSpaceSIP";
 		    
 		    
 		    

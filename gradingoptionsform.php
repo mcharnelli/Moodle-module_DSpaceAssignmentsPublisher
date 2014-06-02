@@ -29,7 +29,7 @@ require_once($CFG->libdir.'/formslib.php');
 require_once($CFG->dirroot . '/mod/assign/locallib.php');
 
 /**
- * Assignment grading options form
+ * SWORD Assignment grading options form
  *
  * @package   mod_assign
  * @copyright 2012 NetSpot {@link http://www.netspot.com.au}
