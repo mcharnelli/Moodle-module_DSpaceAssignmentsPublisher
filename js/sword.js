@@ -32,7 +32,14 @@ function enviar(course_id,assignment_id, swordid)
      }
   );
   } else { 
-      alert("No ha seleccionado ninguna entrega");
+      $.post("message.php", 
+	     {
+	         str:"non_selected"
+	     },
+	     function(data, textStatus, jqXHR) {         
+	         alert(data);		 
+              });     
+      
   }
   
   

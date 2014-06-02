@@ -59,4 +59,6 @@ $string['pluginname'] = 'SWORD';
 $string['selectcollection'] = 'Seleccione una colección';
 $string['publish_status']   = "Estado de envío";
 $string['search_collection'] = "Busque la colección";
-$string['url_collection'] = "Indique la url de la colección";
+$string['non_selected'] = "No ha seleccionado ninguna entrega";
+$string['cannot_get_collections'] = "No se han podido obtener las colecciones";
+

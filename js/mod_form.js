@@ -25,8 +25,16 @@ function getCollections(selected){
 	  
    } ,
      error: function(x,y,z) {
+         $.post("../mod/sword/message.php", 
+	     {
+	         str:"cannot_get_collections"
+	     },
+	     function(data, textStatus, jqXHR) {         
+	         alert(data);		 
+              });  
           $("#accordion").children("h3").eq(1).click();
-          alert("No se han podido obtener las colecciones");
+	 
+          
      } 
   });
 
