@@ -66,7 +66,11 @@ $PAGE->set_context($context);
 // Output starts here
 echo $OUTPUT->header();
 
+if ($sword->intro) { // Conditions to show the intro can change to look for own settings or whatever
 
+    echo $OUTPUT->box(format_module_intro('sword', $sword, $cm->id), 'generalbox mod_introbox', 'swordintro');
+
+}
 
 //code
 echo $OUTPUT->heading(get_string('assignment_list', 'sword'));

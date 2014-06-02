@@ -1,5 +1,6 @@
 function getCollections(selected){
- url = $("#id_base_url").val(); 
+ url = $("#id_base_url").val();
+ $("#id_url_selector").empty();
  $.ajax({
     type: "POST",
      url: "../mod/sword/getCollections.php",
@@ -7,7 +8,7 @@ function getCollections(selected){
      data: {url: url},
      dataType: "json",
      success: function(json) {       
-       $("#id_url_selector").empty();
+       
 	  for (var key in json) {
 	      collection = json[key];
 	      optionBegin = '<option value="' + url + '/sword/deposit/' + collection["handle"] + '"';

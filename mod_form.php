@@ -65,7 +65,7 @@ class mod_sword_mod_form extends moodleform_mod {
         $mform->addHelpButton('name', 'swordname', 'sword');
 
         // Adding the standard "intro" and "introformat" fields
-       // $this->add_intro_editor(true, get_string('description', 'assignment'));
+         $this->add_intro_editor(true, get_string('description', 'assignment'));
 
         //-------------------------------------------------------------------------------
         // Adding the rest of sword settings, spreeading all them into this fieldset
