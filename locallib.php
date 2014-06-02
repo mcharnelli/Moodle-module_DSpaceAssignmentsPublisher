@@ -821,7 +821,7 @@ public function view( $action='grading') {
 		   }
 		   
 		   
-		   $previous_submission = $DB->get_record('sword_submissions',array('submission'=>$submissionid, 'sword'=>$swordid ,'type'=>'assign'));
+		   $previous_submission = $DB->get_record('sword_submissions',array('submission'=>$submissionid, 'sword'=>$sword->id ,'type'=>'assign'));
 		   if ($previous_submission != NULL) {		      
 		      $previous_submission->status = $status;
 		      $DB->update_record('sword_submissions', $previous_submission);

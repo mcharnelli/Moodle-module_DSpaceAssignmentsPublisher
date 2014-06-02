@@ -31,7 +31,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $string['modulename'] = 'SWORD';
-$string['sendtorepo'] = 'Send to repo';
+$string['sendtorepo'] = 'Send to repository';
 $string['modulenameplural'] = 'swords';
 $string['assignment_list']='Lista de Tareas';
 $string['assignment']='Tarea';
@@ -47,10 +47,10 @@ $string['collection']= 'collection';
 $string['username']='usersame';
 $string['password']='password';
 $string['metadata']='Default metadata values';
-$string['subject']='subject';
-$string['rigths']='rights';
-$string['language']='language';
-$string['publisher']='publisher';
+$string['subject']='Subject';
+$string['rights']='Rights';
+$string['language']='Language';
+$string['publisher']='Publisher';
 $string['swordname'] = 'SWORD name';
 $string['msg-repository']="Complete de url with the sword ubication and handle's destine collection";
 $string['swordname_help'] = 'This is the content of the help tooltip associated with the swordname field. Markdown syntax is supported.';

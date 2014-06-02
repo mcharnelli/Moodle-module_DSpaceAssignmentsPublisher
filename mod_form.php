@@ -126,13 +126,13 @@ class mod_sword_mod_form extends moodleform_mod {
             $mform->setType('subject', PARAM_CLEAN);
         }
         
-        $mform->addElement('text', 'rigths', get_string('rigths', 'sword'), array('size'=>'64'));
+        $mform->addElement('text', 'rights', get_string('rights', 'sword'), array('size'=>'64'));
         
         
             if (!empty($CFG->formatstringstriptags)) {
-            $mform->setType('rigths', PARAM_TEXT);
+            $mform->setType('rights', PARAM_TEXT);
         } else {
-            $mform->setType('rigths', PARAM_CLEAN);
+            $mform->setType('rights', PARAM_CLEAN);
         }
         
         
