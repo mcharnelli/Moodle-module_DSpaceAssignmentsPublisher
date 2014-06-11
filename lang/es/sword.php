@@ -65,4 +65,4 @@ $string['publish_status']   = "Estado de envío";
 $string['search_collection'] = "Busque la colección";
 $string['non_selected'] = "No ha seleccionado ninguna entrega";
 $string['cannot_get_collections'] = "No se han podido obtener las colecciones";
-
+$string['url_collection'] = "Ingrese la url de la colección";
