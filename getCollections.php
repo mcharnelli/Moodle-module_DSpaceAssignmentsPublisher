@@ -8,6 +8,7 @@ function remoteFileExists($url) {
     //don't fetch the actual page, you only want to check the connection is ok
     curl_setopt($curl, CURLOPT_NOBODY, true);
 
+
     //do request
     $result = curl_exec($curl);
 
@@ -54,3 +55,4 @@ return false;
 } catch (Exception $e) {
  return false;
 }
+
