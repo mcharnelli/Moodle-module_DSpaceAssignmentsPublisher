@@ -24,6 +24,7 @@ function getCollections(selected){
 	  $('#id_url_selector').prop('disabled', false);
 	  
    } ,
+     
      error: function(x,y,z) {
          $.post("../mod/sword/message.php", 
 	     {
