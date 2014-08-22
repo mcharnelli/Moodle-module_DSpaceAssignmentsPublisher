@@ -38,7 +38,7 @@ require_once($CFG->dirroot . '/mod/sword/renderer.php');
  * logic, should go here. Never include this file from your lib.php!
  *
  * @package    mod_sword
- * @copyright  2011 Your Name
+ * @copyright  2014 Maria Emilia Charnelli
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -464,6 +464,10 @@ public function view( $action='grading') {
            }
         }
         
+         $this->rand_dir_name = substr(chr( mt_rand( ord( 'a' ) ,ord( 'z' ) ) ) .substr( md5( time( ) ) ,1 ),3,9);
+         $this->output_directory = $CFG->dataroot . '/sword/'.$this->rand_dir_name . '/' ;
+	@mkdir($this->output_directory );
+        
         // Build a list of files to zip.
         $filesforzipping = array();
         $fs = get_file_storage();
@@ -543,12 +547,17 @@ public function view( $action='grading') {
            
                 $paquete = $this->makePackage($filesdata, $sword_metadata, $arr, $userid, $this->get_instance()->id);
                 
-                            
+                 
                  $resultado  = $this->sendToRepository($paquete,$submission->id, $sword_metadata);
                
+                
+               
+                 
+                 
                  $error = $error ||  $resultado;
             }
         }
+        $this->delTree($this->output_directory);
         if ($error==true) {
 	  echo get_string('msg_error', 'sword');
         } else {
@@ -557,7 +566,13 @@ public function view( $action='grading') {
         
         
     }
-    
+    private  function delTree($dir) {
+       $files = array_diff(scandir($dir), array('.','..'));
+       foreach ($files as $file) {
+        (is_dir("$dir/$file")) ? delTree("$dir/$file") : unlink("$dir/$file");
+       }
+      return rmdir($dir);
+    } 
     
      /**
      * create xml with METS content
@@ -576,20 +591,19 @@ public function view( $action='grading') {
          $assignment=$DB->get_record('assign',array('id'=> $assigid ));
          
          
-         
+        
         // add context metadata   
         
         $datos=array(
         "author" => $user->firstname . ' '. $user->lastname,
         "title"  => $assignment->name . '-' . $user->lastname,
         "rootin"   => $CFG->dataroot, 
-        "dirin"    => 'temp',
-        "rootout"  => $CFG->dataroot . '/temp',
-	"fileout"  => basename(tempnam($CFG->dataroot . '/temp', 'sword_').'.zip')
+        "dirin"    => 'sword/' . $this->rand_dir_name . '/',
+        "rootout"  => $CFG->dataroot . '/sword/' . $this->rand_dir_name .'/',
+	"fileout"  => basename(tempnam($CFG->dataroot . '/sword/' . $this->rand_dir_name . '/', 'sword_').'.zip')
 	//"fileout"  => $assignment->name . '-' . $user->lastname .'.zip'
 	);
-	
-	
+
      
         
         $datos["files"]=$filesdata;
@@ -626,7 +640,7 @@ public function view( $action='grading') {
              
         $this->makeMets($datos);
           
-        return $datos["rootout"].'/'.$datos["fileout"];
+        return $datos["rootout"].$datos["fileout"];
      }
      
     /**
@@ -688,8 +702,8 @@ public function view( $action='grading') {
      private function sendToRepository($package, $submissionid, $sword) {
      global $CFG,$DB;
      
-                    $dir= $CFG->dataroot . '/temp'.'mets_swap_package.zip';
-                  
+                    $dir= $this->output_directory . 'mets_swap_package.zip';
+		    
                     //$sword=$DB->get_record('sword', array('id' => $swordid));
 		    
 		    // The URL of the service document
@@ -728,9 +742,9 @@ public function view( $action='grading') {
 		    $error = false;
 		    try{
 		        $sac = new SWORDAPPClient();
-	
+			
 		        $dr = $sac->deposit($url, $user, $pw, '', $package, $packageformat,$contenttype, false);
-		        throw new Exception($dr);
+		        
 		   	
 			if ($dr->sac_status!=201) {  
 			      $status='error';
@@ -771,8 +785,8 @@ public function view( $action='grading') {
     */
     private function copyFileToTemp($file) 
     {
-      #kdir($CFG->dataroot . '/temp'.'/moodle');
-      $tempFile=@fopen($CFG->dataroot . '/temp'. $file->get_filename(),"wb");                    
+      
+      $tempFile=@fopen($this->output_directory . $file->get_filename(),"wb");                    
       if ($tempFile ) {
            fwrite($tempFile,$file->get_content());
            fclose($tempFile);  
@@ -780,8 +794,8 @@ public function view( $action='grading') {
     }
     private function createFileInTemp($filename, $content)
     {
-      #mkdir($CFG->dataroot . '/temp'.'/moodle');
-      file_put_contents($CFG->dataroot . '/temp'.$filename,$content);
+     
+      file_put_contents($this->output_directory .$filename,$content);
     }
     
     
