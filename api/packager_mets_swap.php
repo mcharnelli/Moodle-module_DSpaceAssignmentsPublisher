@@ -316,7 +316,7 @@ class PackagerMetsSwap {
         }
 
         if (isset($this->sac_copyrightholder)) {
-            $this->statement($fh, 
+            $this->statement($fh, <
                              "http://purl.org/eprint/terms/copyrightHolder", 
                              $this->valueString($this->sac_copyrightholder));
         }

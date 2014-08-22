@@ -81,7 +81,8 @@ WHERE cm.course = a.course
 AND module = (
 SELECT id
 FROM {modules}
-WHERE name = \'assign\' )';
+WHERE name = \'assign\' ) 
+AND cm.course=?';
 
 
 
@@ -110,11 +111,12 @@ foreach($tareas as $tarea) {
 $sql = 'SELECT cm.id, a.name
 FROM {course_modules} cm
 INNER JOIN {assignment} a ON a.id = cm.instance
-WHERE cm.course = :course
+WHERE cm.course = a.course
 AND module = (
 SELECT id
 FROM {modules}
-WHERE name = \'assignment\' )';
+WHERE name = \'assignment\' ) 
+AND cm.course=?';
 $tareas = $DB->get_records_sql($sql, array('course'=>$course->id));
 foreach($tareas as $tarea) {
   $fila = new html_table_row();

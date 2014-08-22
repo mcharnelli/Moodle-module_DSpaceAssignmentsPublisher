@@ -545,6 +545,7 @@ public function view( $action='grading') {
                 
                             
                  $resultado  = $this->sendToRepository($paquete,$submission->id, $sword_metadata);
+               
                  $error = $error ||  $resultado;
             }
         }
@@ -581,10 +582,10 @@ public function view( $action='grading') {
         $datos=array(
         "author" => $user->firstname . ' '. $user->lastname,
         "title"  => $assignment->name . '-' . $user->lastname,
-        "rootin"   => sys_get_temp_dir(), 
-        "dirin"    => 'moodle',
-        "rootout"  => sys_get_temp_dir().'/moodle',
-	"fileout"  => basename(tempnam(sys_get_temp_dir(), 'sword_').'.zip')
+        "rootin"   => $CFG->dataroot, 
+        "dirin"    => 'temp',
+        "rootout"  => $CFG->dataroot . '/temp',
+	"fileout"  => basename(tempnam($CFG->dataroot . '/temp', 'sword_').'.zip')
 	//"fileout"  => $assignment->name . '-' . $user->lastname .'.zip'
 	);
 	
@@ -687,7 +688,7 @@ public function view( $action='grading') {
      private function sendToRepository($package, $submissionid, $sword) {
      global $CFG,$DB;
      
-                    $dir= sys_get_temp_dir().'mets_swap_package.zip';
+                    $dir= $CFG->dataroot . '/temp'.'mets_swap_package.zip';
                   
                     //$sword=$DB->get_record('sword', array('id' => $swordid));
 		    
@@ -728,7 +729,8 @@ public function view( $action='grading') {
 		    try{
 		        $sac = new SWORDAPPClient();
 	
-		        $dr = $sac->deposit($url, $user, $pw, '', $package, $packageformat,$contenttype, false);		   		   
+		        $dr = $sac->deposit($url, $user, $pw, '', $package, $packageformat,$contenttype, false);
+		        throw new Exception($dr);
 		   	
 			if ($dr->sac_status!=201) {  
 			      $status='error';
@@ -769,8 +771,8 @@ public function view( $action='grading') {
     */
     private function copyFileToTemp($file) 
     {
-      @mkdir(sys_get_temp_dir().'/moodle');
-      $tempFile=@fopen(sys_get_temp_dir().'/moodle/'. $file->get_filename(),"wb");                    
+      #kdir($CFG->dataroot . '/temp'.'/moodle');
+      $tempFile=@fopen($CFG->dataroot . '/temp'. $file->get_filename(),"wb");                    
       if ($tempFile ) {
            fwrite($tempFile,$file->get_content());
            fclose($tempFile);  
@@ -778,8 +780,8 @@ public function view( $action='grading') {
     }
     private function createFileInTemp($filename, $content)
     {
-      @mkdir(sys_get_temp_dir().'/moodle');
-      file_put_contents(sys_get_temp_dir().'/moodle/'.$filename,$content);
+      #mkdir($CFG->dataroot . '/temp'.'/moodle');
+      file_put_contents($CFG->dataroot . '/temp'.$filename,$content);
     }
     
     
