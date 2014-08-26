@@ -466,7 +466,8 @@ public function view( $action='grading') {
         
          $this->rand_dir_name = substr(chr( mt_rand( ord( 'a' ) ,ord( 'z' ) ) ) .substr( md5( time( ) ) ,1 ),3,9);
          $this->output_directory = $CFG->dataroot . '/sword/'.$this->rand_dir_name . '/' ;
-	@mkdir($this->output_directory );
+
+	@mkdir($this->output_directory, $CFG->directorypermissions, true );
         
         // Build a list of files to zip.
         $filesforzipping = array();
